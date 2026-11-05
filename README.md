@@ -1,5 +1,6 @@
 <img width="653" height="236" alt="IMG_20261105_235921_47" src="https://github.com/user-attachments/assets/89c6b34a-cca8-4dbb-9476-68a35d953a03" />
 
+<img width="1408" height="768" alt="IMG_20261106_001647_265" src="https://github.com/user-attachments/assets/3d269be9-d400-4144-b04c-b6cf174b9745" />
 
 # Weather+ — a serverless weather PWA
 
