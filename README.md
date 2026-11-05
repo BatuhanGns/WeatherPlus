@@ -1,3 +1,6 @@
+<img width="653" height="236" alt="IMG_20261105_235921_47" src="https://github.com/user-attachments/assets/89c6b34a-cca8-4dbb-9476-68a35d953a03" />
+
+
 # Weather+ — a serverless weather PWA
 
 A fast, installable weather app that runs **entirely in the browser**. No backend, no API keys, no accounts.
