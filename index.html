@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -122,10 +122,10 @@ box-shadow:inset 0 1.5px 0 rgba(255,255,255,.55),inset 0 -1px 0 rgba(255,255,255
 .foot{text-align:center;font-size:12px;color:var(--ink3);margin-top:4px}
 .foot a{color:inherit}
 
-#setup{position:fixed;inset:0;z-index:20;display:flex;visibility:hidden;opacity:0;transition:opacity .35s ease,visibility 0s linear .35s;align-items:flex-end;justify-content:center;padding:16px calc(16px) calc(env(safe-area-inset-bottom,0px) + 16px);background:rgba(8,12,28,.4);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
-#setup.on{visibility:visible;opacity:1;transition:opacity .35s ease}
+#setup,#lang{position:fixed;inset:0;z-index:20;display:flex;visibility:hidden;opacity:0;transition:opacity .35s ease,visibility 0s linear .35s;align-items:flex-end;justify-content:center;padding:16px calc(16px) calc(env(safe-area-inset-bottom,0px) + 16px);background:rgba(8,12,28,.4);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+#setup.on,#lang.on{visibility:visible;opacity:1;transition:opacity .35s ease}
 .sheet{width:100%;max-width:480px;padding:30px 22px 22px;transform:translateY(70px) scale(.96);opacity:0;transition:transform .55s cubic-bezier(.2,1.1,.3,1),opacity .4s ease}
-#setup.on .sheet{transform:none;opacity:1}
+#setup.on .sheet,#lang.on .sheet{transform:none;opacity:1}
 .sheet .ic{width:80px;height:80px;margin:0 auto 8px}
 .sheet h1{font-size:30px;font-weight:300;text-align:center}
 .sheet .sub{text-align:center;color:var(--ink2);font-weight:300;margin:6px 0 20px}
@@ -151,7 +151,7 @@ box-shadow:inset 0 1.5px 0 rgba(255,255,255,.55),inset 0 -1px 0 rgba(255,255,255
 .t.x>*:not(h4):not(.xc):not(.chart){display:none}
 .t.x .xc{display:grid;place-items:center}
 .t.x .chart{display:flex}
-.t.x h4::after{content:" · saatlik tahmin";text-transform:none;letter-spacing:0}
+.t.x h4::after{content:" · " var(--hx,"");text-transform:none;letter-spacing:0}
 @keyframes xin{from{opacity:.5;transform:scaleX(.55)}}
 .xc{position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:50%;border:0;background:rgba(255,255,255,.2);cursor:pointer;z-index:2}
 .xc svg{width:14px;height:14px;stroke:#fff;stroke-width:2.6;stroke-linecap:round;fill:none}
@@ -174,6 +174,7 @@ box-shadow:inset 0 1.5px 0 rgba(255,255,255,.55),inset 0 -1px 0 rgba(255,255,255
 @keyframes rs{to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rise{opacity:1;transform:none}}
 @media (max-width:380px){.temp{font-size:96px}.d{grid-template-columns:72px 32px 28px 1fr 28px}}
+.foot .ai{margin-top:6px;font-size:11px;opacity:.8}.foot .ai a{color:inherit}
 </style>
 </head>
 <body>
@@ -190,13 +191,13 @@ box-shadow:inset 0 1.5px 0 rgba(255,255,255,.55),inset 0 -1px 0 rgba(255,255,255
 
 <main id="app">
   <div class="top rise" style="--i:0">
-    <button class="city glass press" id="cityBtn" aria-label="Konumu değiştir">
+    <button class="city glass press" id="cityBtn" aria-label="Change location" data-i18n-aria="changeLoc">
       <svg viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
       <span id="cityName">Hava</span>
     </button>
-    <div class="tb"><button class="rf glass press" id="rf" aria-label="Yenile"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4v5h-5"/></svg></button></div>
+    <div class="tb"><button class="rf glass press" id="lgBtn" aria-label="Language" data-i18n-aria="language"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.8 3.9 5.8 3.9 9s-1.3 6.2-3.9 9c-2.6-2.8-3.9-5.8-3.9-9S9.4 5.8 12 3z"/></svg></button><button class="rf glass press" id="rf" aria-label="Refresh" data-i18n-aria="refresh"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4v5h-5"/></svg></button></div>
   </div>
-  <div class="live rise" style="--i:1"><span id="upd">Yükleniyor</span></div>
+  <div class="live rise" style="--i:1"><span id="upd">Loading…</span></div>
   <div class="dots" id="dots"></div>
   <section class="hero rise" style="--i:2">
     <div id="hIcon"></div>
@@ -205,39 +206,40 @@ box-shadow:inset 0 1.5px 0 rgba(255,255,255,.55),inset 0 -1px 0 rgba(255,255,255
     <div class="hl" id="hl">&nbsp;</div>
     <div class="rainalert" id="rain" hidden></div>
   </section>
-  <section class="glass card rise" style="--i:3"><h3>Saatlik tahmin</h3><div class="hours" id="hours"></div></section>
-  <section class="glass card rise" style="--i:4"><h3 id="dayT">7 günlük tahmin</h3><div class="days" id="days"></div><div class="mr"><button class="more press" id="more" aria-label="Daha fazla gün göster"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button></div></section>
+  <section class="glass card rise" style="--i:3"><h3 data-i18n="hourly">Hourly forecast</h3><div class="hours" id="hours"></div></section>
+  <section class="glass card rise" style="--i:4"><h3 id="dayT">7-day forecast</h3><div class="days" id="days"></div><div class="mr"><button class="more press" id="more" aria-label="Show more days" data-i18n-aria="moreDays"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button></div></section>
   <section class="grid rise" style="--i:5" id="tiles"></section>
-  <div class="foot"><button class="inst press" id="inst" hidden>Uygulama olarak yükle</button><br>Veri: <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a></div>
+  <div class="foot"><button class="inst press" id="inst" hidden data-i18n="install">Install as app</button><br><span data-i18n="dataBy">Data:</span> <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a><div class="ai"><span data-i18n="aiNote">Made with generative AI (Claude Sonnet 5.5)</span> · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a></div></div>
 </main>
 
 <div id="setup">
   <div class="sheet glass">
     <div id="sIcon"></div>
-    <h1 id="sTitle">Hoş geldin</h1>
-    <p class="sub" id="sSub">Bulunduğun yerin havasını takip et.</p>
-    <button class="btn press" id="geoBtn">Konumumu kullan</button>
-    <div class="or" id="sOr">veya şehir ara</div>
-    <input class="inp" id="q" placeholder="Şehir adı yaz" autocomplete="off">
+    <h1 id="sTitle">Welcome</h1>
+    <p class="sub" id="sSub">Follow the weather where you are.</p>
+    <button class="btn press" id="geoBtn" data-i18n="useLoc">Use my location</button>
+    <div class="or" id="sOr" data-i18n="orSearch">or search for a city</div>
+    <input class="inp" id="q" placeholder="Type a city name" data-i18n-ph="cityPh" autocomplete="off">
     <div class="sg" id="sg"></div>
     <div class="msg" id="msg"></div>
-    <button class="close" id="delBtn" style="display:none;color:#ffb3a0">Bu şehri kaldır</button>
-    <button class="close" id="closeBtn" style="display:none">Vazgeç</button>
+    <button class="close" id="delBtn" style="display:none;color:#ffb3a0" data-i18n="removeCity">Remove this city</button>
+    <button class="close" id="closeBtn" style="display:none" data-i18n="cancel">Cancel</button>
   </div>
 </div>
+<div id="lang"><div class="sheet glass"><h1 data-i18n="language">Language</h1><p class="sub" data-i18n="langSub">Choose your language</p><input class="inp" id="lq" data-i18n-ph="langSearch" placeholder="Search languages" autocomplete="off"><div class="sg" id="lg"></div><button class="close" id="lClose" style="display:none" data-i18n="cancel">Cancel</button></div></div>
 <div id="toast" class="glass"></div>
 
 <script>
 const tmo=ms=>typeof AbortSignal!=='undefined'&&AbortSignal.timeout?AbortSignal.timeout(ms):undefined;
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 /* ---------- Veri: doğrudan Open-Meteo (sunucu yok) ---------- */
-const WMO={0:[1000,'Açık'],1:[1000,'Çoğunlukla açık'],2:[1003,'Parçalı bulutlu'],3:[1009,'Kapalı'],45:[1135,'Sisli'],48:[1147,'Kırağılı sis'],51:[1153,'Hafif çisenti'],53:[1153,'Çisenti'],55:[1153,'Yoğun çisenti'],56:[1168,'Donan çisenti'],57:[1168,'Donan çisenti'],61:[1183,'Hafif yağmur'],63:[1189,'Yağmur'],65:[1195,'Şiddetli yağmur'],66:[1198,'Donan yağmur'],67:[1198,'Donan yağmur'],71:[1213,'Hafif kar'],73:[1219,'Kar'],75:[1225,'Yoğun kar'],77:[1213,'Kar taneleri'],80:[1240,'Sağanak'],81:[1243,'Sağanak'],82:[1246,'Şiddetli sağanak'],85:[1255,'Kar sağanağı'],86:[1258,'Kar sağanağı'],95:[1087,'Gök gürültülü fırtına'],96:[1276,'Dolulu fırtına'],99:[1276,'Dolulu fırtına']};
-const wcond = c => { const w = WMO[c] || [1009, 'Bilinmiyor']; return { code: w[0], text: w[1], icon: '' }; };
+const WMO={0:[1000],1:[1000],2:[1003],3:[1009],45:[1135],48:[1147],51:[1153],53:[1153],55:[1153],56:[1168],57:[1168],61:[1183],63:[1189],65:[1195],66:[1198],67:[1198],71:[1213],73:[1219],75:[1225],77:[1213],80:[1240],81:[1243],82:[1246],85:[1255],86:[1258],95:[1087],96:[1276],99:[1276]};
+const wcond = c => ({ code: (WMO[c] || [1009])[0], wmo: WMO[c] ? c : -1, text: '', icon: '' });
 const DIRS = ['K','KKD','KD','DKD','D','DGD','GD','GGD','G','GGB','GB','BGB','B','BKB','KB','KKB'];
 
 async function fetchWeather(q) {
   const [la, lo] = String(q).split(',').map(Number);
-  if (!Number.isFinite(la) || !Number.isFinite(lo) || Math.abs(la) > 90 || Math.abs(lo) > 180) throw new Error('Geçersiz konum');
+  if (!Number.isFinite(la) || !Number.isFinite(lo) || Math.abs(la) > 90 || Math.abs(lo) > 180) throw new Error('Invalid location');
   const u =
     `https://api.open-meteo.com/v1/forecast?latitude=${la}&longitude=${lo}` +
     `&timezone=auto&forecast_days=14&wind_speed_unit=kmh` +
@@ -248,7 +250,7 @@ async function fetchWeather(q) {
   const r = await fetch(u, { signal: tmo(15000) });
   if (!r.ok) throw new Error('Open-Meteo ' + r.status);
   const j = await r.json();
-  if (!j.current || !j.hourly || !j.daily) throw new Error('Open-Meteo eksik veri döndürdü');
+  if (!j.current || !j.hourly || !j.daily) throw new Error('Open-Meteo: incomplete data');
 
   let aq = null, aqH = [];
   try {
@@ -287,7 +289,7 @@ async function fetchWeather(q) {
   return {
     ver: 7,
     metrics,
-    location: { name: 'Konum', country: '', localtime: lt },
+    location: { name: '', country: '', localtime: lt },
     current: {
       last_updated: lt,
       temp_c: T,
@@ -337,21 +339,22 @@ async function fetchWeather(q) {
 
 const $=id=>document.getElementById(id);
 const LS={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}};
-let cities=(()=>{let a=JSON.parse(LS.get('w_cities')||'null');if(!Array.isArray(a)){const o=JSON.parse(LS.get('w_loc')||'null');a=o?[o]:[]}return a.filter(Boolean).slice(0,3)})(),ci=0,loc=cities[0]||null,timer=null,fetching=false,lastTemp=null,firstRender=true,lastJson='';
+const MAXC=5,SYNC=15*60e3;
+let cities=(()=>{let a=JSON.parse(LS.get('w_cities')||'null');if(!Array.isArray(a)){const o=JSON.parse(LS.get('w_loc')||'null');a=o?[o]:[]}return a.filter(Boolean).slice(0,MAXC)})(),ci=0,loc=cities[0]||null,timer=null,fetching=false,lastTemp=null,firstRender=true,lastJson='';
 
 /* ---------- Animasyonlu SVG ikonlar (internet gerektirmez) ---------- */
 const SUN=(x,y,r)=>{let s='';for(let i=0;i<8;i++){const a=i*Math.PI/4,c=Math.cos(a),n=Math.sin(a);s+=`<line x1="${x+c*(r+5)}" y1="${y+n*(r+5)}" x2="${x+c*(r+9)}" y2="${y+n*(r+9)}"/>`}
  return `<g class="rays" style="transform-origin:${x}px ${y}px" stroke="#ffc94d" stroke-width="3" stroke-linecap="round">${s}</g><circle cx="${x}" cy="${y}" r="${r}" fill="url(#gS)"/>`};
 const MOON='<path d="M38 10a20 20 0 1 0 14 30 16 16 0 0 1-14-30z" fill="url(#gM)"/>';
 const CL=(f='gC',t='')=>`<g transform="${t}"><path class="cl" d="M20 48a10 10 0 0 1-1.5-19.9A14 14 0 0 1 45.5 31 8.5 8.5 0 0 1 46 48z" fill="url(#${f})"/></g>`;
-const drops=[0,1,2].map(i=>`<line class="rn" style="animation-delay:${i*.35}s" x1="${24+i*8}" y1="50" x2="${22+i*8}" y2="57" stroke="#7cc4ff" stroke-width="3" stroke-linecap="round"/>`).join('');
-const flakes=[0,1,2].map(i=>`<circle class="sn" style="animation-delay:${i*.8}s" cx="${24+i*8}" cy="54" r="2.2" fill="#fff"/>`).join('');
+const drops=Array.from({length:MAXC},(_,i)=>i).map(i=>`<line class="rn" style="animation-delay:${i*.35}s" x1="${24+i*8}" y1="50" x2="${22+i*8}" y2="57" stroke="#7cc4ff" stroke-width="3" stroke-linecap="round"/>`).join('');
+const flakes=Array.from({length:MAXC},(_,i)=>i).map(i=>`<circle class="sn" style="animation-delay:${i*.8}s" cx="${24+i*8}" cy="54" r="2.2" fill="#fff"/>`).join('');
 function ic(kind,day){
   let b;
   switch(kind){
     case'clear':b=day?SUN(32,32,12):MOON;break;
     case'partly':b=(day?SUN(23,23,9):'<g transform="translate(-3 -3) scale(.8)">'+MOON+'</g>')+CL('gC','translate(4 6)');break;
-    case'fog':b=CL('gC','translate(0 -4)')+[0,1,2].map(i=>`<line x1="${16+i*3}" y1="${46+i*6}" x2="${48-i*3}" y2="${46+i*6}" stroke="#fff" stroke-opacity=".8" stroke-width="3" stroke-linecap="round"/>`).join('');break;
+    case'fog':b=CL('gC','translate(0 -4)')+Array.from({length:MAXC},(_,i)=>i).map(i=>`<line x1="${16+i*3}" y1="${46+i*6}" x2="${48-i*3}" y2="${46+i*6}" stroke="#fff" stroke-opacity=".8" stroke-width="3" stroke-linecap="round"/>`).join('');break;
     case'rain':b=CL('gD','translate(0 -6)')+drops;break;
     case'snow':b=CL('gC','translate(0 -6)')+flakes;break;
     case'storm':b=CL('gD','translate(0 -8)')+'<polygon class="bl" points="35,40 27,53 33,53 29,62 41,47 34,47" fill="#ffd84d"/>';break;
@@ -422,18 +425,18 @@ function spec(e){const t=e.target.closest&&e.target.closest('.glass');if(!t)retu
 addEventListener('pointermove',spec,{passive:true});addEventListener('pointerdown',spec,{passive:true});
 
 /* ---------- Veri ---------- */
-const uvT=u=>u<3?'Düşük':u<6?'Orta':u<8?'Yüksek':u<11?'Çok yüksek':'Aşırı';
-const aqT=i=>['','İyi','Orta','Hassaslar için riskli','Sağlıksız','Çok sağlıksız','Tehlikeli'][i]||'';
+const uvT=u=>tx(u<3?'uv.low':u<6?'uv.mod':u<8?'uv.high':u<11?'uv.vhigh':'uv.ext');
+const aqT=i=>i?tx('aq.'+i):'';
 const hhmm=s=>s?String(s).slice(-5):'--:--';
 const key=s=>{const m=String(s||'').match(/(\d+)-(\d+)-(\d+)\D+(\d+)/);return m?m[1]+m[2].padStart(2,'0')+m[3].padStart(2,'0')+m[4].padStart(2,'0'):''};
-const dn=t=>new Date(String(t).slice(0,10)+'T12:00').toLocaleDateString('tr-TR',{weekday:'short'});
+const dn=t=>new Date(String(t).slice(0,10)+'T12:00').toLocaleDateString(LC,{weekday:'short'});
 const t24=s=>{const iso=/T(\d+):(\d+)/.exec(s||'');if(iso)return iso[1].padStart(2,'0')+':'+iso[2];const m=/(\d+):(\d+)\s*(AM|PM)/i.exec(s||'');if(!m)return '—';let h=+m[1]%12;if(/pm/i.test(m[3]))h+=12;return String(h).padStart(2,'0')+':'+m[2]};
 const num=v=>Number.isFinite(Number(v))?Number(v):null;
 function toast(t){const e=$('toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),3200)}
 
 async function nameOf(la,lo){
   try{
-    const r=await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${la}&longitude=${lo}&localityLanguage=tr`);
+    const r=await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${la}&longitude=${lo}&localityLanguage=${LANGC}`);
     const j=await r.json();
     const a=[j.locality,j.city].filter((x,i,s)=>x&&s.indexOf(x)===i);
     return a.slice(0,2).join(', ')||null;
@@ -447,13 +450,13 @@ async function load(){
     LS.set('w_cache'+idx,JSON.stringify(d));LS.set('w_t'+idx,String(Date.now()));
     if(loc===my)render(d);
   }catch(e){
-    toast(navigator.onLine?'Veri alınamadı: '+(e&&e.message||'bilinmeyen hata'):'Çevrimdışısın, son veri gösteriliyor');
+    toast(navigator.onLine?tx('err.fetch')+': '+(e&&e.message||tx('err.unknown')):tx('err.offline'));
     if(loc===my&&firstRender){const c=LS.get('w_cache'+idx);if(c)try{render(JSON.parse(c),true)}catch(_){}}
   }finally{fetching=false;setTimeout(()=>$('rf').classList.remove('spin'),500)}
 }
 function syncOthers(){
   cities.forEach((c,i)=>{
-    if(!c||i===ci||age(i)<600000)return;
+    if(!c||i===ci||age(i)<SYNC)return;
     fetchWeather(c.q).then(d=>{if(cities[i]!==c)return;LS.set('w_cache'+i,JSON.stringify(d));LS.set('w_t'+i,String(Date.now()))}).catch(()=>{});
   });
 }
@@ -474,27 +477,26 @@ function sunTile(a,lt){
   const sr=pm(a.sunrise),ss=pm(a.sunset),m=/(\d+):(\d+)\s*$/.exec(lt||''),now=m?+m[1]*60+ +m[2]:null;
   if(sr===null||ss===null||now===null)return '';
   const f=(now-sr)/(ss-sr),up=f>=0&&f<=1,k=Math.min(Math.max(f,0),1),e=Math.sin(Math.PI*k);
-  const fm=x=>{const h=Math.floor(x/60),mm=x%60;return (h?h+' sa ':'')+mm+' dk'};
+  const fm=x=>{const h=Math.floor(x/60),mm=x%60;return (h?h+' '+tx('u.h')+' ':'')+mm+' '+tx('u.min')};
   const x=150-130*Math.cos(Math.PI*k),y=90-64*e,w=up?Math.min(Math.max(1-Math.sqrt(e),0),1):1;
   const top=up?mix([40,120,230],[58,52,122],w):[8,12,40],bot=up?mix([140,205,255],[255,150,90],w):[38,48,110];
-  const msg=up?`Batışa ${fm(ss-now)} kaldı`:now<sr?`Doğuşa ${fm(sr-now)} kaldı`:'Güneş battı';
+  const msg=up?tx('sun.toSet',{x:fm(ss-now)}):now<sr?tx('sun.toRise',{x:fm(sr-now)}):tx('sun.set');
   const inner=`<path d="${PTH}" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="2" stroke-dasharray="2 7" stroke-linecap="round"/>`+(up?`<path d="${PTH}" pathLength="100" fill="none" stroke="#ffd877" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="${f*100} 100"/><line x1="${x}" y1="${y}" x2="${x}" y2="90" stroke="rgba(255,255,255,.35)" stroke-width="1.5" stroke-dasharray="2 4"/><circle cx="${x}" cy="90" r="2.5" fill="rgba(255,255,255,.7)"/><circle class="pl2" cx="${x}" cy="${y}" r="32" fill="url(#gl)"/>${SUN(x,y,12)}`:'');
-  return `<div class="t wide glass press"><h4>Gün doğumu ve batımı</h4>${scene(top,bot,'#ffd877',!up,inner)}<div class="sun2"><div>${t24(a.sunrise)}<small>Doğuş</small></div><p><b>${msg}</b><br><small>${up?`Yükseklik %${Math.round(e*100)} · `:''}Gün ${fm(ss-sr)}</small></p><div>${t24(a.sunset)}<small>Batış</small></div></div></div>`;
+  return `<div class="t wide glass press"><h4>${tx('sun.title')}</h4>${scene(top,bot,'#ffd877',!up,inner)}<div class="sun2"><div>${t24(a.sunrise)}<small>${tx('rise')}</small></div><p><b>${msg}</b><br><small>${up?`${tx('altitude')} %${Math.round(e*100)} · `:''}${tx('dayLen')} ${fm(ss-sr)}</small></p><div>${t24(a.sunset)}<small>${tx('set')}</small></div></div></div>`;
 }
 /* ---------- Saatlik metrik detayı (kutucuğa çift dokun) ---------- */
-const MK={'Hissedilen':'feels','Nem':'hum','Rüzgar':'wind','UV indeksi':'uv','Görüş':'vis','Basınç':'pres','Bulutluluk':'cloud','Hava kalitesi':'aqi'};
 const CFG={feels:{f:v=>Math.round(v)+'°'},hum:{f:v=>v+'%',lo:0,hi:100},wind:{f:v=>v,lo:0,hiMin:30},uv:{f:v=>Math.round(v),lo:0,hi:11,col:11},vis:{f:v=>v>=10?Math.round(v):v,lo:0},pres:{f:v=>v},cloud:{f:v=>v+'%',lo:0,hi:100},aqi:{f:v=>v,lo:0,hi:6,col:6}};
 const scol=f=>f<.2?'#5fd068':f<.4?'#ffd84d':f<.6?'#ff9a3d':f<.8?'#ff5a5a':'#b05aff';
 let xm=null,tapT=0,tapK='';
 function buildChart(k){
-  const M=DD&&DD.metrics,c=CFG[k];if(!M||!M[k]||!M[k].length)return '<p class="nodata">Saatlik veri yok.</p>';
+  const M=DD&&DD.metrics,c=CFG[k];if(!M||!M[k]||!M[k].length)return '<p class="nodata">'+tx('noHourly')+'</p>';
   const d0=Date.parse(String(M.start).replace(' ','T')),dn=Date.parse(String(DD.location.localtime).replace(' ','T'));
-  const i0=Math.max(0,Math.floor((dn-d0)/36e5)),vals=M[k].slice(i0,i0+72);if(!vals.length)return '<p class="nodata">Saatlik veri yok.</p>';
+  const i0=Math.max(0,Math.floor((dn-d0)/36e5)),vals=M[k].slice(i0,i0+72);if(!vals.length)return '<p class="nodata">'+tx('noHourly')+'</p>';
   const ok=vals.filter(v=>v!=null),mn=Math.min(...ok),mx=Math.max(...ok);
   const lo=c.lo!==undefined?c.lo:mn,hi=c.hi!==undefined?c.hi:Math.max(mx,c.hiMin||0),rg=(hi-lo)||1,zb=c.lo!==undefined;
   return vals.map((v,j)=>{
     const t=new Date(d0+(i0+j)*36e5),hr=t.getHours();
-    const lb=j===0?'Şimdi':hr===0?t.toLocaleDateString('tr-TR',{weekday:'short'}):String(hr).padStart(2,'0');
+    const lb=j===0?tx('now'):hr===0?t.toLocaleDateString(LC,{weekday:'short'}):String(hr).padStart(2,'0');
     const p=v==null?0:Math.round((zb?.06+.94*(v-lo)/rg:.15+.85*(v-lo)/rg)*100);
     const bg=c.col?scol(Math.min(Math.max((v-lo)/rg,0),1)):'linear-gradient(#cfeeff,#6db8ff)';
     const ar=k==='wind'&&M.wdir?`<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="transform:rotate(${(M.wdir[i0+j]||0)+180}deg)"><path d="M12 20V5M6 11l6-6 6 6"/></svg>`:'';
@@ -526,15 +528,15 @@ $('tiles').addEventListener('click',e=>{
 let DD=null,exp=false,xt;
 function drawDays(){
   if(!DD)return;const c=DD.current,f=DD.forecast.forecastday;
-  $('dayT').textContent=exp?'14 günlük tahmin':'7 günlük tahmin';
+  $('dayT').textContent=tx('days',{n:exp?14:7});
   const fd=f.slice(0,exp?14:7);
   const temps=fd.flatMap(x=>[x.day.mintemp_c,x.day.maxtemp_c]).filter(Number.isFinite);
   const mn=Math.min(...temps),mx=Math.max(...temps),rg=(mx-mn)||1;
   $('days').innerHTML=fd.map((x,i)=>{
-    const nm=i===0?'Bugün':new Date(x.date+'T12:00').toLocaleDateString('tr-TR',{weekday:'long'});
+    const nm=i===0?tx('today'):new Date(x.date+'T12:00').toLocaleDateString(LC,{weekday:'long'});
     const a=(x.day.mintemp_c-mn)/rg*100,b=Math.max((x.day.maxtemp_c-mn)/rg*100,a+10);
     const rp=x.day.rain??Math.max(0,...(x.hour||[]).map(h=>h.chance_of_rain||0));
-    const sub=[exp&&new Date(x.date+'T12:00').toLocaleDateString('tr-TR',{day:'numeric',month:'short'}),rp>=20&&`%${rp} yağış`].filter(Boolean).join(' · ');
+    const sub=[exp&&new Date(x.date+'T12:00').toLocaleDateString(LC,{day:'numeric',month:'short'}),rp>=20&&tx('rainPct',{p:rp})].filter(Boolean).join(' · ');
     const dot=i===0?`<u style="left:${Math.min(Math.max((c.temp_c-mn)/rg*100,0),100)}%"></u>`:'';
     return `<div class="d"><b>${nm}${sub?`<span class="rainp">${sub}</span>`:''}</b>${ic(kindOf(x.day.condition&&x.day.condition.code),1)}<span class="lo">${Math.round(x.day.mintemp_c)}°</span><div class="bar"><i style="left:${a}%;right:${100-b}%"></i>${dot}</div><span class="hi">${Math.round(x.day.maxtemp_c)}°</span></div>`}).join('');
 }
@@ -573,31 +575,31 @@ function moonTile(f,lt){
   if(up){set=nx?nx[0]:null;rise=pv?pv[0]:(set?set-12*36e5:null)}
   else{rise=nx&&nx[1]===1?nx[0]:null;const s2=ev[pi+2];set=s2&&s2[1]===0?s2[0]:null}
   const fr=up&&rise&&set?Math.min(Math.max((now-rise)/(set-rise),0),1):null;
-  const fm=ms=>{const x=Math.round(ms/6e4),h=Math.floor(x/60),m=x%60;return (h?h+' sa ':'')+m+' dk'};
+  const fm=ms=>{const x=Math.round(ms/6e4),h=Math.floor(x/60),m=x%60;return (h?h+' '+tx('u.h')+' ':'')+m+' '+tx('u.min')};
   const tm=ms=>{if(!ms)return '—';const d=new Date(ms);return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')};
-  const msg=up?(set?`Ay batışına ${fm(set-now)} kaldı`:'Ay gökyüzünde'):(rise?`Ay doğuşuna ${fm(rise-now)} kaldı`:'Ay görünmüyor');
+  const msg=up?(set?tx('moon.toSet',{x:fm(set-now)}):tx('moon.up')):(rise?tx('moon.toRise',{x:fm(rise-now)}):tx('moon.none'));
   const p=num((f[0].astro||{}).moon_phase),P='M20 88A130 72 0 0 1 280 88';
   let nm='',il='';
-  if(p!==null){nm=p<.03||p>.97?'Yeni ay':p<.22?'Büyüyen hilal':p<.28?'İlk dördün':p<.47?'Büyüyen ay':p<.53?'Dolunay':p<.72?'Küçülen ay':p<.78?'Son dördün':'Küçülen hilal';il=Math.round((1-Math.cos(2*Math.PI*p))/2*100)}
+  if(p!==null){nm=tx('moon.'+(p<.03||p>.97?0:p<.22?1:p<.28?2:p<.47?3:p<.53?4:p<.72?5:p<.78?6:7));il=Math.round((1-Math.cos(2*Math.PI*p))/2*100)}
   const k=fr===null?0:fr,x=150-130*Math.cos(Math.PI*k),y=90-64*Math.sin(Math.PI*k);
   const mk=(cx,cy,o)=>p!==null?`<g opacity="${o}" transform="translate(${cx-20} ${cy-20})">${phaseG(p)}</g>`:`<circle cx="${cx}" cy="${cy}" r="10" fill="#f3efd2" opacity="${o}"/>`;
   const inner=`<path d="${PTH}" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="2" stroke-dasharray="2 7" stroke-linecap="round"/>`+
     (fr!==null?`<path d="${PTH}" pathLength="100" fill="none" stroke="#b9c6ff" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="${fr*100} 100"/><line x1="${x}" y1="${y}" x2="${x}" y2="90" stroke="rgba(255,255,255,.35)" stroke-width="1.5" stroke-dasharray="2 4"/><circle cx="${x}" cy="90" r="2.5" fill="rgba(255,255,255,.7)"/><circle class="pl2" cx="${x}" cy="${y}" r="34" fill="url(#gl)"/>${mk(x,y,1)}`:(!up&&rise?mk(20,90,.45):''));
-  return `<div class="t wide glass press"><h4>Ay doğuşu ve batışı</h4>${scene([8,12,40],[38,48,110],'#cfd8ff',true,inner)}<div class="sun2"><div>${tm(rise)}<small>Doğuş</small></div><p>${p!==null?phaseIc(p)+`<br><b>${nm}</b> · %${il}<br>`:''}<small>${msg}${fr!==null?` · Yükseklik %${Math.round(Math.sin(Math.PI*fr)*100)}`:''}</small></p><div>${tm(set)}<small>Batış</small></div></div></div>`;
+  return `<div class="t wide glass press"><h4>${tx('moon.title')}</h4>${scene([8,12,40],[38,48,110],'#cfd8ff',true,inner)}<div class="sun2"><div>${tm(rise)}<small>${tx('rise')}</small></div><p>${p!==null?phaseIc(p)+`<br><b>${nm}</b> · %${il}<br>`:''}<small>${msg}${fr!==null?` · ${tx('altitude')} %${Math.round(Math.sin(Math.PI*fr)*100)}`:''}</small></p><div>${tm(set)}<small>${tx('set')}</small></div></div></div>`;
 }
-function render(d,stale){
+function render(d,stale){RSTALE=!!stale;
   document.body.classList.remove('ld');
-  if(!d||!d.current||!d.location||!d.forecast||!Array.isArray(d.forecast.forecastday)||!d.forecast.forecastday.length)throw new Error('Geçersiz hava verisi');
+  if(!d||!d.current||!d.location||!d.forecast||!Array.isArray(d.forecast.forecastday)||!d.forecast.forecastday.length)throw new Error(tx('err.invalid'));
   const c=d.current,l=d.location,f=d.forecast.forecastday,cc=c.condition||{};
   const js=JSON.stringify(d)+(stale?1:0);
-  $('upd').textContent='Güncelleme: '+hhmm(c.last_updated)+(stale?' (kayıtlı)':'');
-  $('cityName').textContent=(loc&&loc.name)||(l.name+(l.country&&l.country!=='Turkey'?', '+l.country:''));
+  $('upd').textContent=tx('updated',{t:hhmm(c.last_updated)})+(stale?' ('+tx('saved')+')':'');
+  $('cityName').textContent=(loc&&loc.name)||tx('location');
   if(js===lastJson)return;lastJson=js;
   const day=c.is_day===1;
   $('hIcon').innerHTML=ic(kindOf(cc.code),day);
   countTo($('temp'),Math.round(c.temp_c));
-  $('cond').textContent=cc.text||'Bilinmiyor';
-  $('hl').textContent=`En yüksek ${Math.round(f[0].day.maxtemp_c)}°  En düşük ${Math.round(f[0].day.mintemp_c)}°`;
+  $('cond').textContent=wtxt(cc);
+  $('hl').textContent=tx('hiLo',{hi:Math.round(f[0].day.maxtemp_c),lo:Math.round(f[0].day.mintemp_c)});
   setTheme(themeOf(cc.code,day));
 
   // saatlik
@@ -605,34 +607,34 @@ function render(d,stale){
   const hrs=f.flatMap(x=>x.hour||[]).filter(h=>h&&key(h.time)>=nowK).slice(0,72);
   const nx=hrs.slice(0,12);let pk=null;nx.forEach((x,i)=>{if(!pk||x.chance_of_rain>pk.c)pk={c:x.chance_of_rain,i,t:x.time}});
   const ra=$('rain'),dp='<svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z" fill="#7cc4ff"/></svg>';
-  if(pk&&pk.c>=30){ra.innerHTML=dp+(pk.i===0?`Şu an %${pk.c} yağış ihtimali var`:`${String(pk.t).slice(11,16)} saatinde %${pk.c} yağış bekleniyor`);ra.hidden=false}else ra.hidden=true;
+  if(pk&&pk.c>=30){ra.innerHTML=dp+(pk.i===0?tx('rain.now',{p:pk.c}):tx('rain.at',{t:String(pk.t).slice(11,16),p:pk.c}));ra.hidden=false}else ra.hidden=true;
   const sl=$('hours').scrollLeft;
   $('hours').innerHTML=hrs.length?hrs.map((h,i)=>{
     const hr=+(String(h.time).match(/\s(\d+)/)||[0,12])[1],dy=h.is_day!==undefined?h.is_day===1:(hr>=6&&hr<20);
-    return `<div class="h ${i?(hr===0?'dayb':''):'now'}"><b>${i?(hr===0?dn(h.time):String(hr).padStart(2,'0')):'Şimdi'}</b>${ic(kindOf(h.condition&&h.condition.code),dy)}<span>${Math.round(h.temp_c)}°</span><small>${h.chance_of_rain>=20?'%'+h.chance_of_rain:''}</small></div>`}).join('')
-    :'<p class="nodata">Saatlik veri henüz hazır değil, birazdan yenilenir.</p>';
+    return `<div class="h ${i?(hr===0?'dayb':''):'now'}"><b>${i?(hr===0?dn(h.time):String(hr).padStart(2,'0')):tx('now')}</b>${ic(kindOf(h.condition&&h.condition.code),dy)}<span>${Math.round(h.temp_c)}°</span><small>${h.chance_of_rain>=20?'%'+h.chance_of_rain:''}</small></div>`}).join('')
+    :'<p class="nodata">'+tx('hoursPending')+'</p>';
   $('hours').scrollLeft=sl;
 
   DD=d;drawDays();
   // kutucuklar
   const ast=f[0].astro||{},aq=c.air_quality&&c.air_quality['us-epa-index'];
   const p=num(c.pressure_mb),v=num(c.vis_km),uv=num(c.uv)||0;
-  const T=(h,body,sub)=>`<div class="t glass press" data-m="${MK[h]||''}"><button class="xc" aria-label="Kapat"><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button><h4>${h}</h4>${body}<p>${sub||''}</p><div class="chart"></div></div>`;
+  const T=(h,body,sub)=>`<div class="t glass press" data-m="${h}"><button class="xc" aria-label="${tx('close')}"><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button><h4>${tx('tile.'+h)}</h4>${body}<p>${sub||''}</p><div class="chart"></div></div>`;
   const S=(val,u)=>`<strong>${val}<em>${u||''}</em></strong>`;
   $('tiles').innerHTML=
-   T('Hissedilen',S(Math.round(c.feelslike_c)+'°'),c.feelslike_c>c.temp_c+1?'Olduğundan sıcak hissediliyor':c.feelslike_c<c.temp_c-1?'Olduğundan soğuk hissediliyor':'Gerçek sıcaklığa yakın')+
-   T('Nem',S(c.humidity,'%'),`Çiy noktası ${Math.round(c.dewpoint_c)}°`)+
-   T('Rüzgar',`<div class="row">${S(Math.round(c.wind_kph),'km/s')}<div class="cmp"><svg id="wa" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V5M6 11l6-6 6 6"/></svg></div></div>`,`${c.wind_dir||'—'}${c.gust_kph?`, hamle ${Math.round(c.gust_kph)} km/s`:''}`)+
-   T('UV indeksi',S(Math.round(uv))+`<div class="sc"><u style="left:${Math.min(uv/11,1)*100}%"></u></div>`,uvT(uv))+
-   T('Görüş',S(v!==null?v:'—','km'),v>=10?'Açık':v>=4?'Orta':v!==null?'Kısıtlı':'')+
-   T('Basınç',S(p>0?Math.round(p):'—','hPa'),p>0?(p<1009?'Düşük':p>1022?'Yüksek':'Normal'):'Veri yok')+
-   T('Bulutluluk',S(num(c.cloud)??'—','%'),num(c.cloud)===null?'Veri yok':c.cloud<20?'Açık':c.cloud<60?'Parçalı bulutlu':c.cloud<90?'Çok bulutlu':'Kapalı')+
-   T('Hava kalitesi',S(aq||'—')+(aq?`<div class="sc"><u style="left:${(aq-.5)/6*100}%"></u></div>`:''),aq?aqT(aq):'Veri yok')+skyTile(f,l.localtime);
+   T('feels',S(Math.round(c.feelslike_c)+'°'),c.feelslike_c>c.temp_c+1?tx('feels.hot'):c.feelslike_c<c.temp_c-1?tx('feels.cold'):tx('feels.same'))+
+   T('hum',S(c.humidity,'%'),tx('dew',{x:Math.round(c.dewpoint_c)}))+
+   T('wind',`<div class="row">${S(Math.round(c.wind_kph),tx('u.kmh'))}<div class="cmp"><svg id="wa" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V5M6 11l6-6 6 6"/></svg></div></div>`,`${dirOf(c)}${c.gust_kph?`, ${tx('gust',{x:Math.round(c.gust_kph)})}`:''}`)+
+   T('uv',S(Math.round(uv))+`<div class="sc"><u style="left:${Math.min(uv/11,1)*100}%"></u></div>`,uvT(uv))+
+   T('vis',S(v!==null?v:'—','km'),v>=10?tx('vis.clear'):v>=4?tx('vis.mod'):v!==null?tx('vis.low'):'')+
+   T('pres',S(p>0?Math.round(p):'—','hPa'),p>0?(p<1009?tx('pres.low'):p>1022?tx('pres.high'):tx('pres.norm')):tx('noData'))+
+   T('cloud',S(num(c.cloud)??'—','%'),num(c.cloud)===null?tx('noData'):tx('cloud.'+(c.cloud<20?0:c.cloud<60?1:c.cloud<90?2:3)))+
+   T('aqi',S(aq||'—')+(aq?`<div class="sc"><u style="left:${(aq-.5)/6*100}%"></u></div>`:''),aq?aqT(aq):tx('noData'))+skyTile(f,l.localtime);
   if(xm)openX(xm,true);
   requestAnimationFrame(()=>{const w=$('wa');if(w)w.style.transform=`rotate(${(c.wind_degree||0)+180}deg)`});
   if(firstRender){firstRender=false;document.body.classList.add('go')}
 }
-function start(){clearInterval(timer);load();syncOthers();timer=setInterval(()=>{if(!document.hidden)load()},300000)}
+function start(){clearInterval(timer);load();syncOthers();timer=setInterval(()=>{if(!document.hidden){if(age(ci)>=SYNC)load();syncOthers()}},60000)}
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&loc){if(cities.some(c=>c.geo))locate(true);if(age(ci)>60000)load();syncOthers()}});
 addEventListener('pageshow',e=>{if(e.persisted&&loc&&age(ci)>60000)load()});
 addEventListener('online',()=>load());
@@ -645,19 +647,19 @@ addEventListener('appinstalled',()=>{$('inst').hidden=true;dip=null});
 
 /* ---------- Konum ---------- */
 const saveC=()=>LS.set('w_cities',JSON.stringify(cities));
-const TT=['Birincil','İkincil','Üçüncül'];let sSlot=0;
+let sSlot=0;
 function openSetup(c,slot){
   sSlot=slot||0;const has=!!cities[sSlot];
   $('setup').classList.add('on');
   $('closeBtn').style.display=(cities.length||sSlot>0)?'block':'none';
   $('delBtn').style.display=sSlot>0&&has?'block':'none';
-  $('sTitle').textContent=(!has&&sSlot===0)?'Hoş geldin':`${TT[sSlot]} şehri ${has?'değiştir':'seçin'}`;
-  $('sSub').textContent=sSlot?'Bu şehir de uygulamayı açtığında otomatik güncellenir.':'Bulunduğun yerin havasını takip et.';
+  $('sTitle').textContent=(!has&&sSlot===0)?tx('welcome'):has?tx('changeCity',{n:sSlot+1}):tx('addCity',{n:sSlot+1});
+  $('sSub').textContent=sSlot?tx('syncSub'):tx('welcomeSub');
   $('geoBtn').style.display=$('sOr').style.display=sSlot?'none':'';
   $('msg').textContent='';
 }
 function closeSetup(){$('setup').classList.remove('on');$('sg').innerHTML='';$('q').value=''}
-function dots(){$('dots').innerHTML=[0,1,2].map(i=>`<i data-i="${i}" class="${i===ci?'on':''}${cities[i]?'':' em'}"></i>`).join('')}
+function dots(){$('dots').innerHTML=Array.from({length:MAXC},(_,i)=>i).map(i=>`<i data-i="${i}" class="${i===ci?'on':''}${cities[i]?'':' em'}"></i>`).join('')}
 function slideAnim(dir){
   if(!dir||reduce)return;
   [...$('app').children].filter(e=>!e.classList.contains('top')&&e.id!=='dots').forEach((e,i)=>e.animate([{opacity:0,transform:`translateX(${dir>0?40:-40}px)`},{opacity:1,transform:'none'}],{duration:450,delay:i*45,easing:'cubic-bezier(.2,1,.3,1)',fill:'backwards'}));
@@ -671,14 +673,14 @@ function showCity(i,dir){
   if(!ok)$('cityName').textContent=loc.name||'';
   fetching=false;start();dots();slideAnim(dir);
 }
-function goCity(i,dir){if(i<0||i>2)return;if(!cities[i]){openSetup(false,i);return}showCity(i,dir)}
+function goCity(i,dir){if(i<0||i>=MAXC)return;if(!cities[i]){openSetup(false,i);return}showCity(i,dir)}
 function swipe(dx){if(dx<0)goCity(ci+1,1);else goCity(ci-1,-1)}
 function pick(l){
   const s=sSlot;cities[s]=l;saveC();LS.set('w_cache'+s,'');LS.set('w_t'+s,'0');closeSetup();
   showCity(s,s>ci?1:s<ci?-1:0);
 }
 function locate(silent){
-  if(!navigator.geolocation){if(!silent)$('msg').textContent='Tarayıcı konumu desteklemiyor, şehir ara.';return}
+  if(!navigator.geolocation){if(!silent)$('msg').textContent=tx('geoUnsupported');return}
   navigator.geolocation.getCurrentPosition(async p=>{
     const la=p.coords.latitude.toFixed(3),lo=p.coords.longitude.toFixed(3),q=la+','+lo;
     if(silent){
@@ -687,11 +689,11 @@ function locate(silent){
       cities[gi]={q,geo:true,name};saveC();
       if(gi===ci){loc=cities[gi];load()}
         }else{pick({q,geo:true,name:await nameOf(la,lo)})}
-  },()=>{if(!silent)$('msg').textContent='Konum izni verilmedi. Şehir adı yazarak devam et.'},{enableHighAccuracy:false,timeout:10000,maximumAge:300000});
+  },()=>{if(!silent)$('msg').textContent=tx('geoDenied')},{enableHighAccuracy:false,timeout:10000,maximumAge:300000});
 }
-$('geoBtn').onclick=()=>{$('msg').textContent='Konum alınıyor...';locate(false)};
+$('geoBtn').onclick=()=>{$('msg').textContent=tx('locating');locate(false)};
 $('cityBtn').onclick=()=>openSetup(true,ci);
-$('delBtn').onclick=()=>{if(sSlot<1||!cities[sSlot])return;const s=sSlot;cities.splice(s,1);saveC();for(let i=s;i<3;i++){LS.set('w_cache'+i,'');LS.set('w_t'+i,'0')}closeSetup();showCity(s-1,-1)};
+$('delBtn').onclick=()=>{if(sSlot<1||!cities[sSlot])return;const s=sSlot;cities.splice(s,1);saveC();for(let i=s;i<MAXC;i++){LS.set('w_cache'+i,'');LS.set('w_t'+i,'0')}closeSetup();showCity(s-1,-1)};
 $('dots').onclick=e=>{const i=+(e.target.dataset||{}).i;if(isNaN(i)||i===ci||i>cities.length)return;goCity(i,i>ci?1:-1)};
 {const hero=document.querySelector('.hero');let sx=0,sy=0,on=false;hero.addEventListener('pointerdown',e=>{sx=e.clientX;sy=e.clientY;on=true});hero.addEventListener('pointerup',e=>{if(!on)return;on=false;const dx=e.clientX-sx,dy=e.clientY-sy;if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.6)swipe(dx)});hero.addEventListener('pointercancel',()=>{on=false})}
 $('closeBtn').onclick=closeSetup;
@@ -700,16 +702,66 @@ $('q').addEventListener('input',e=>{
   clearTimeout(st);const v=e.target.value.trim();if(v.length<2){$('sg').innerHTML='';return}
   st=setTimeout(async()=>{
     try{
-      const r=await fetch('https://geocoding-api.open-meteo.com/v1/search?name='+encodeURIComponent(v)+'&count=8&language=tr&format=json');if(!r.ok)throw 0;const j=await r.json();const a=(j.results||[]).map(x=>({name:x.name,region:x.admin1||'',country:x.country||'',lat:x.latitude,lon:x.longitude}));
-      $('sg').innerHTML=a.length?a.map((x,i)=>`<button data-i="${i}">${esc(x.name)}<small>${esc([x.region,x.country].filter(Boolean).join(', '))}</small></button>`).join(''):'<div class="msg">Sonuç bulunamadı</div>';
+      const r=await fetch('https://geocoding-api.open-meteo.com/v1/search?name='+encodeURIComponent(v)+'&count=8&language='+LANGC+'&format=json');if(!r.ok)throw 0;const j=await r.json();const a=(j.results||[]).map(x=>({name:x.name,region:x.admin1||'',country:x.country||'',lat:x.latitude,lon:x.longitude}));
+      $('sg').innerHTML=a.length?a.map((x,i)=>`<button data-i="${i}">${esc(x.name)}<small>${esc([x.region,x.country].filter(Boolean).join(', '))}</small></button>`).join(''):'<div class="msg">'+tx('noResults')+'</div>';
       $('sg').querySelectorAll('button').forEach(b=>b.onclick=()=>{const x=a[b.dataset.i];pick({q:(+x.lat).toFixed(2)+','+(+x.lon).toFixed(2),name:x.name})});
       $('msg').textContent='';
-    }catch(err){$('msg').textContent='Arama başarısız. Bağlantıyı kontrol et.'}
+    }catch(err){$('msg').textContent=tx('searchFail')}
   },300);
 });
 
-try{localStorage.removeItem('w_push')}catch(e){}
-if(loc){const c=LS.get('w_cache0')||LS.get('w_cache');if(c){try{render(JSON.parse(c),true)}catch(e){}}saveC();dots();start();if(cities.some(c=>c.geo))locate(true)}else{dots();openSetup(false,0)}
+function boot(){
+  try{localStorage.removeItem('w_push')}catch(e){}
+  if(LS.get('w_ver')!=='8'){for(let i=0;i<MAXC;i++){LS.set('w_cache'+i,'');LS.set('w_t'+i,'0')}LS.set('w_cache','');LS.set('w_ver','8')}
+  if(loc){const c=LS.get('w_cache0');if(c){try{render(JSON.parse(c),true)}catch(e){}}saveC();dots();start();if(cities.some(c=>c.geo))locate(true)}else{dots();openSetup(false,0)}
+}
+
+/* ---------- Dil (languages/*.json) ---------- */
+let LD=null,LEN=null,LANGC='en',LC='en-US',LANGS=[],RSTALE=false,LANGFIRST=false;
+const getJ=u=>fetch(u,{cache:'no-cache'}).then(r=>{if(!r.ok)throw 0;return r.json()});
+const tx=(k,v)=>{let r=(LD&&LD.s&&LD.s[k])??(LEN&&LEN.s&&LEN.s[k])??k;if(v)for(const a in v)r=r.split('{'+a+'}').join(v[a]);return r};
+const WG={57:56,67:66,86:85,99:96,81:80};
+const wtxt=cc=>{const k=cc&&cc.wmo!=null?(WG[cc.wmo]||cc.wmo):null;return (k!=null&&((LD&&LD.wmo&&LD.wmo[k])||(LEN&&LEN.wmo&&LEN.wmo[k])))||(cc&&cc.text)||tx('unknown')};
+const dirOf=c=>{const a=LD&&LD.dirs;return a&&a.length===16?a[Math.round((c.wind_degree||0)/22.5)%16]:(c.wind_dir||'—')};
+const fold=x=>String(x).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+function applyStatic(){
+  document.querySelectorAll('[data-i18n]').forEach(e=>e.textContent=tx(e.dataset.i18n));
+  document.querySelectorAll('[data-i18n-ph]').forEach(e=>e.placeholder=tx(e.dataset.i18nPh));
+  document.querySelectorAll('[data-i18n-aria]').forEach(e=>e.setAttribute('aria-label',tx(e.dataset.i18nAria)));
+  document.documentElement.style.setProperty('--hx',JSON.stringify(tx('hourlyForecast')));
+}
+async function setLang(code){
+  try{if(!LEN)LEN=await getJ('languages/en.json')}catch(e){}
+  try{LD=code==='en'?LEN:await getJ('languages/'+code+'.json')}catch(e){LD=LEN;code='en'}
+  LANGC=code;LC=(LD&&LD.meta&&LD.meta.locale)||code;
+  document.documentElement.lang=code;
+  applyStatic();
+  lastJson='';
+  if(DD){try{render(DD,RSTALE)}catch(e){}}else $('upd').textContent=tx('loading');
+}
+function langList(f){
+  f=fold(f||'');const dev=(navigator.language||'en').slice(0,2).toLowerCase();
+  const a=LANGS.filter(x=>!f||fold(x.name+' '+x.english+' '+x.code).includes(f))
+    .sort((p,q)=>(q.code===LANGC)-(p.code===LANGC)||(q.code===dev)-(p.code===dev));
+  $('lg').innerHTML=a.length?a.map(x=>`<button data-c="${esc(x.code)}">${esc(x.name)}<small>${esc(x.english)}${x.code===LANGC?' ✓':''}</small></button>`).join(''):'<div class="msg">'+tx('noResults')+'</div>';
+}
+function openLang(first){LANGFIRST=!!first;$('lClose').style.display=first?'none':'block';$('lq').value='';langList('');$('lang').classList.add('on')}
+$('lgBtn').onclick=()=>openLang(false);
+$('lClose').onclick=()=>$('lang').classList.remove('on');
+$('lang').addEventListener('click',e=>{if(e.target===$('lang')&&!LANGFIRST)$('lang').classList.remove('on')});
+$('lq').addEventListener('input',()=>langList($('lq').value));
+$('lg').onclick=async e=>{
+  const b=e.target.closest('button[data-c]');if(!b)return;
+  await setLang(b.dataset.c);LS.set('w_lang',LANGC);$('lang').classList.remove('on');
+  if(LANGFIRST){LANGFIRST=false;boot()}
+};
+
+(async()=>{
+  try{LANGS=await getJ('languages/index.json')}catch(e){LANGS=[{code:'en',name:'English',english:'English'},{code:'tr',name:'Türkçe',english:'Turkish'}]}
+  const sv=LS.get('w_lang'),ok=sv&&LANGS.some(x=>x.code===sv);
+  await setLang(ok?sv:'en');
+  if(ok)boot();else openLang(true);
+})();
 if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 </script>
 </body>

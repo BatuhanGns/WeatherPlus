@@ -1,4 +1,4 @@
-const V='hava-v14',SHELL=['./','index.html','manifest.webmanifest'];
+const V='hava-v15',SHELL=['./','index.html','manifest.webmanifest','languages/index.json','languages/en.json'];
 self.addEventListener('install',e=>{
   e.waitUntil(caches.open(V).then(c=>Promise.allSettled(SHELL.map(u=>c.add(u)))));
   self.skipWaiting();

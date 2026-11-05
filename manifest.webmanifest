@@ -1,9 +1,9 @@
 {
   "id": "./",
-  "name": "Hava",
-  "short_name": "Hava",
-  "description": "Canlı hava durumu, saatlik ve 7 günlük tahmin",
-  "lang": "tr",
+  "name": "Weather+",
+  "short_name": "Weather+",
+  "description": "Live weather, hourly and 14-day forecast.",
+  "lang": "en",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
