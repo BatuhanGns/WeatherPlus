@@ -157,3 +157,5 @@ box-shadow:inset 0 1.5px 0 rgba(255,255,255,.55),inset 0 -1px 0 rgba(255,255,255
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rise{opacity:1;transform:none}}
 @media (max-width:380px){.temp{font-size:96px}.d{grid-template-columns:72px 32px 28px 1fr 28px}}
 .foot .ai{margin-top:6px;font-size:11px;opacity:.8}.foot .ai a{color:inherit}
+
+#sndBtn .x{display:none}#sndBtn.off .x{display:block}#sndBtn.off .w{display:none}
