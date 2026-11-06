@@ -13,6 +13,10 @@ A fast, installable weather app that runs **entirely in the browser**. No backen
 - No push notifications, no server
 - Custom `404.html` page (also translated)
 
+## Credits
+- For third-party assets, audio attributions and other acknowledgements, see
+[CREDITS.md](CREDITS.md).
+
 ## Project structure
 No build step, no framework: plain HTML/CSS/JS split into small files. The scripts are classic `<script>` tags that share one scope and are loaded **in the order listed in `index.html`**.
 ```
