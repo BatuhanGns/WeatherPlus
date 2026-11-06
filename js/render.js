@@ -77,6 +77,7 @@ function render(d,stale){RSTALE=!!stale;
   $('cond').textContent=wtxt(cc);
   $('hl').textContent=tx('hiLo',{hi:Math.round(f[0].day.maxtemp_c),lo:Math.round(f[0].day.mintemp_c)});
   setTheme(themeOf(cc.code,day));
+  setSound(soundFor(themeOf(cc.code,day),c));
 
   // hourly strip
   const nowK=key(l.localtime);
