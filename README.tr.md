@@ -10,6 +10,9 @@ Tamamen **tarayıcıda** çalışan, yüklenebilir hızlı bir hava durumu uygul
 - `languages/*.json` dosyalarından **çoklu dil** (English, Türkçe, Deutsch, Français, Español). İlk açılışta İngilizce başlar ve dil sorar; sonradan dünya simgesinden aranıp değiştirilebilir
 - Bildirim ve sunucu yok
 
+## Teşekkürler
+- Üçüncü taraf varlıklar, ses atıfları ve diğer teşekkürler için [CREDITS.md](CREDITS.md) dosyasına göz atabilirsiniz.
+
 ## Proje yapısı
 Derleme adımı ve framework yok: düz HTML/CSS/JS, küçük dosyalara bölünmüş. Scriptler tek bir kapsamı paylaşan klasik `<script>` etiketleridir ve `index.html` içindeki **sırayla** yüklenir.
 ```
