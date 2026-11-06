@@ -10,6 +10,21 @@ Tamamen **tarayıcıda** çalışan, yüklenebilir hızlı bir hava durumu uygul
 - `languages/*.json` dosyalarından **çoklu dil** (English, Türkçe, Deutsch, Français, Español). İlk açılışta İngilizce başlar ve dil sorar; sonradan dünya simgesinden aranıp değiştirilebilir
 - Bildirim ve sunucu yok
 
+## Proje yapısı
+Derleme adımı ve framework yok: düz HTML/CSS/JS, küçük dosyalara bölünmüş. Scriptler tek bir kapsamı paylaşan klasik `<script>` etiketleridir ve `index.html` içindeki **sırayla** yüklenir.
+```
+index.html              sayfa iskeleti + <script> etiketleri
+404.html                bağımsız "sayfa bulunamadı" ekranı (GitHub Pages otomatik sunar)
+sw.js                   service worker (çevrimdışı önbellek) — yeni dosyaları SHELL'e ekle
+manifest.webmanifest    PWA manifesti
+css/style.css           tüm stiller
+js/                     core, api, icons, themes, particles, sync, metric-chart,
+                        render, lifecycle, cities, i18n, app (her dosyanın başında ne yaptığı yazar)
+languages/              index.json + her dil için bir JSON
+images/                 icon.svg, icon-192.png, icon-512.png, icon-maskable-*.png, apple-touch-icon.png
+```
+**Neyi nerede değiştiririm?** hava kaynağı → `js/api.js` · sync süresi / şehir sayısı → `js/core.js` · görünüm → `css/style.css` · metinler → `languages/*.json`.
+
 ## Çalıştırma
 `file://` ile açılmaz; yerel sunucu kullan:
 ```bash

@@ -1,7 +1,3 @@
-<img width="653" height="236" alt="IMG_20261105_235921_47" src="https://github.com/user-attachments/assets/89c6b34a-cca8-4dbb-9476-68a35d953a03" />
-
-<img width="1408" height="768" alt="IMG_20261106_001647_265" src="https://github.com/user-attachments/assets/3d269be9-d400-4144-b04c-b6cf174b9745" />
-
 # Weather+ — a serverless weather PWA
 
 A fast, installable weather app that runs **entirely in the browser**. No backend, no API keys, no accounts.
@@ -15,17 +11,34 @@ A fast, installable weather app that runs **entirely in the browser**. No backen
 - Installable PWA with offline support (last data is shown when offline)
 - **Multi-language UI** loaded from `languages/*.json` (English, Türkçe, Deutsch, Français, Español). The app starts in English on first launch and asks for your language; you can search and change it any time via the globe button
 - No push notifications, no server
+- Custom `404.html` page (also translated)
 
 ## Project structure
+No build step, no framework: plain HTML/CSS/JS split into small files. The scripts are classic `<script>` tags that share one scope and are loaded **in the order listed in `index.html`**.
 ```
-index.html              the whole app (HTML + CSS + JS)
-sw.js                   service worker (offline cache)
+index.html              page markup + <script> tags
+404.html                self-contained "page not found" screen (GitHub Pages serves it automatically)
+sw.js                   service worker (offline cache) — add new files to SHELL
 manifest.webmanifest    PWA manifest
-languages/
-  index.json            list of supported languages (shown in the picker)
-  en.json, tr.json …    translations
-icon*.png, icon.svg, apple-touch-icon.png
+css/
+  style.css             all styles
+js/
+  core.js               helpers ($, localStorage wrapper), city list, constants (MAXC=5, SYNC=15 min)
+  api.js                Open-Meteo requests (the only file that talks to the weather API)
+  icons.js              animated SVG weather icons
+  themes.js             sky colors by weather / time of day
+  particles.js          canvas effects (rain, snow, stars)
+  sync.js               load(), 15-min auto sync, formatters, sun tile
+  metric-chart.js       hourly detail chart (double-tap a tile)
+  render.js             renders the whole screen (day list, moon/sun, tiles)
+  lifecycle.js          timers, visibility/online events, install prompt
+  cities.js             city slots, setup sheet, geolocation, city search
+  i18n.js               language loading + picker (tx() translator)
+  app.js                boot() and service worker registration
+languages/              index.json + one JSON file per language
+images/                 icon.svg, icon-192.png, icon-512.png, icon-maskable-*.png, apple-touch-icon.png
 ```
+**Where do I change…?** weather source → `js/api.js` · sync interval or max cities → `js/core.js` · colors/looks → `css/style.css` · texts → `languages/*.json`.
 
 ## Run locally
 Service workers and `fetch` need http(s), so don't open `index.html` via `file://`:
