@@ -28,6 +28,7 @@ js/
   icons.js              animated SVG weather icons
   themes.js             sky colors by weather / time of day
   particles.js          canvas effects (rain, snow, stars)
+  sound.js              ambient weather sound (Web Audio, loop + cross-fade)
   sync.js               load(), 15-min auto sync, formatters, sun tile
   metric-chart.js       hourly detail chart (double-tap a tile)
   render.js             renders the whole screen (day list, moon/sun, tiles)
@@ -35,10 +36,25 @@ js/
   cities.js             city slots, setup sheet, geolocation, city search
   i18n.js               language loading + picker (tx() translator)
   app.js                boot() and service worker registration
+sound/                  nature, night, rain, snowstorm, thunder_rain, wind (.mp3)
 languages/              index.json + one JSON file per language
 images/                 icon.svg, icon-192.png, icon-512.png, icon-maskable-*.png, apple-touch-icon.png
 ```
 **Where do I change…?** weather source → `js/api.js` · sync interval or max cities → `js/core.js` · colors/looks → `css/style.css` · texts → `languages/*.json`.
+
+## Ambient sound
+Put your audio files in `sound/` (names must match). The track follows the weather, loops gapless and cross-fades when conditions change:
+
+| File | Played when |
+|---|---|
+| `thunder_rain.mp3` | thunderstorm |
+| `rain.mp3` | rain / drizzle |
+| `snowstorm.mp3` | snow |
+| `wind.mp3` | windy (wind ≥ 30 km/h or gusts ≥ 50 km/h) |
+| `nature.mp3` | calm/cloudy/fog by day |
+| `night.mp3` | calm/cloudy/fog at night |
+
+Browsers block audio until the first tap, so sound starts on your first interaction. The speaker button in the top bar mutes/unmutes (remembered). Tweak volume/fade in `js/sound.js` (`SND_VOLUME`, `SND_FADE`). Make sure you have the rights to the audio you add: the project license covers the code, not your sound files.
 
 ## Run locally
 Service workers and `fetch` need http(s), so don't open `index.html` via `file://`:

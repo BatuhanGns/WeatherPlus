@@ -18,12 +18,19 @@ index.html              sayfa iskeleti + <script> etiketleri
 sw.js                   service worker (çevrimdışı önbellek) — yeni dosyaları SHELL'e ekle
 manifest.webmanifest    PWA manifesti
 css/style.css           tüm stiller
-js/                     core, api, icons, themes, particles, sync, metric-chart,
+js/                     core, api, icons, themes, particles, sound, sync, metric-chart,
                         render, lifecycle, cities, i18n, app (her dosyanın başında ne yaptığı yazar)
+sound/                  nature, night, rain, snowstorm, thunder_rain, wind (.mp3)
 languages/              index.json + her dil için bir JSON
 images/                 icon.svg, icon-192.png, icon-512.png, icon-maskable-*.png, apple-touch-icon.png
 ```
 **Neyi nerede değiştiririm?** hava kaynağı → `js/api.js` · sync süresi / şehir sayısı → `js/core.js` · görünüm → `css/style.css` · metinler → `languages/*.json`.
+
+## Ortam sesi
+Ses dosyalarını `sound/` klasörüne koy (isimler aynı olmalı). Parça havaya göre seçilir, kesintisiz döner ve hava değişince yumuşakça geçiş yapar:
+`thunder_rain.mp3` fırtına · `rain.mp3` yağmur · `snowstorm.mp3` kar · `wind.mp3` rüzgarlı (≥30 km/s veya hamle ≥50) · `nature.mp3` gündüz sakin/bulutlu/sisli · `night.mp3` gece.
+
+Tarayıcılar ilk dokunuşa kadar sesi engeller; ses ilk etkileşimde başlar. Üst çubuktaki hoparlör düğmesi sesi kapatır/açar (hatırlanır). Ses seviyesi ve geçiş süresi `js/sound.js` içinde (`SND_VOLUME`, `SND_FADE`). Eklediğin seslerin kullanım hakkına sahip olduğundan emin ol: proje lisansı kodu kapsar, ses dosyalarını değil.
 
 ## Çalıştırma
 `file://` ile açılmaz; yerel sunucu kullan:
