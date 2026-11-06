@@ -108,7 +108,13 @@
   "err.fetch": "Could not fetch data",
   "err.unknown": "unknown error",
   "err.offline": "You're offline, showing last data",
-  "err.invalid": "Invalid weather data"
+  "err.invalid": "Invalid weather data",
+  "nf.title": "Page not found",
+  "nf.text": "The page you're looking for doesn't exist or has been moved.",
+  "nf.home": "Back to Weather+",
+  "sound": "Ambient sound",
+  "soundOn": "Ambient sound on",
+  "soundOff": "Ambient sound off"
  },
  "dirs": [
   "N",

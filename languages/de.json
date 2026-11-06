@@ -108,7 +108,13 @@
   "err.fetch": "Daten konnten nicht geladen werden",
   "err.unknown": "unbekannter Fehler",
   "err.offline": "Du bist offline, letzte Daten werden angezeigt",
-  "err.invalid": "Ungültige Wetterdaten"
+  "err.invalid": "Ungültige Wetterdaten",
+  "nf.title": "Seite nicht gefunden",
+  "nf.text": "Die gesuchte Seite existiert nicht oder wurde verschoben.",
+  "nf.home": "Zurück zu Weather+",
+  "sound": "Umgebungsgeräusch",
+  "soundOn": "Umgebungsgeräusch an",
+  "soundOff": "Umgebungsgeräusch aus"
  },
  "dirs": [
   "N",

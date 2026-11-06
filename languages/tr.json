@@ -108,7 +108,13 @@
   "err.fetch": "Veri alınamadı",
   "err.unknown": "bilinmeyen hata",
   "err.offline": "Çevrimdışısın, son veri gösteriliyor",
-  "err.invalid": "Geçersiz hava verisi"
+  "err.invalid": "Geçersiz hava verisi",
+  "nf.title": "Sayfa bulunamadı",
+  "nf.text": "Aradığın sayfa mevcut değil ya da taşınmış olabilir.",
+  "nf.home": "Weather+'a dön",
+  "sound": "Ortam sesi",
+  "soundOn": "Ortam sesi açık",
+  "soundOff": "Ortam sesi kapalı"
  },
  "dirs": [
   "K",

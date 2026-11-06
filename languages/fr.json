@@ -108,7 +108,13 @@
   "err.fetch": "Impossible de récupérer les données",
   "err.unknown": "erreur inconnue",
   "err.offline": "Vous êtes hors ligne, dernières données affichées",
-  "err.invalid": "Données météo invalides"
+  "err.invalid": "Données météo invalides",
+  "nf.title": "Page introuvable",
+  "nf.text": "La page que vous cherchez n’existe pas ou a été déplacée.",
+  "nf.home": "Retour à Weather+",
+  "sound": "Son d’ambiance",
+  "soundOn": "Son d’ambiance activé",
+  "soundOff": "Son d’ambiance désactivé"
  },
  "dirs": [
   "N",

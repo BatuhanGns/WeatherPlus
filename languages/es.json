@@ -108,7 +108,13 @@
   "err.fetch": "No se pudieron obtener los datos",
   "err.unknown": "error desconocido",
   "err.offline": "Sin conexión, mostrando los últimos datos",
-  "err.invalid": "Datos meteorológicos no válidos"
+  "err.invalid": "Datos meteorológicos no válidos",
+  "nf.title": "Página no encontrada",
+  "nf.text": "La página que buscas no existe o se ha movido.",
+  "nf.home": "Volver a Weather+",
+  "sound": "Sonido ambiente",
+  "soundOn": "Sonido ambiente activado",
+  "soundOff": "Sonido ambiente desactivado"
  },
  "dirs": [
   "N",
