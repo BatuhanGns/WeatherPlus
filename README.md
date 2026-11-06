@@ -13,10 +13,6 @@ A fast, installable weather app that runs **entirely in the browser**. No backen
 - No push notifications, no server
 - Custom `404.html` page (also translated)
 
-## Credits
-- For third-party assets, audio attributions and other acknowledgements, see
-[CREDITS.md](CREDITS.md).
-
 ## Project structure
 No build step, no framework: plain HTML/CSS/JS split into small files. The scripts are classic `<script>` tags that share one scope and are loaded **in the order listed in `index.html`**.
 ```
@@ -58,7 +54,7 @@ Put your audio files in `sound/` (names must match). The track follows the weath
 | `nature.mp3` | calm/cloudy/fog by day |
 | `night.mp3` | calm/cloudy/fog at night |
 
-Browsers block audio until the first tap, so sound starts on your first interaction. The speaker button in the top bar mutes/unmutes (remembered). Tweak volume/fade in `js/sound.js` (`SND_VOLUME`, `SND_FADE`). Make sure you have the rights to the audio you add: the project license covers the code, not your sound files.
+Browsers block audio until the first tap, so sound starts on your first interaction. The speaker button in the top bar mutes/unmutes (remembered). Tweak volume/fade in `js/sound.js` (`SND_VOLUME`, `SND_FADE`). Sounds are from Pixabay (see [CREDITS.md](CREDITS.md)) and are **not** covered by the project license. Only add audio you have the rights to.
 
 ## Run locally
 Service workers and `fetch` need http(s), so don't open `index.html` via `file://`:
@@ -83,8 +79,11 @@ Missing keys automatically fall back to English.
 - Weather, air quality and city search: [Open-Meteo](https://open-meteo.com/) (CC BY 4.0, free for non-commercial use)
 - Reverse geocoding of your position: [BigDataCloud](https://www.bigdatacloud.com/) client-side API
 
+## Credits
+Audio, data sources and contact: [CREDITS.md](CREDITS.md). Want to help? See [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## AI disclosure
 This project was **generated with generative AI** (Claude Sonnet 5.5 by Anthropic) under human direction and review.
 
 ## License
-[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) — attribution, non-commercial, share-alike. See [LICENSE](LICENSE).
+[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) — attribution, non-commercial, share-alike. See [LICENSE](LICENSE). Sound effects are excluded (Pixabay Content License).

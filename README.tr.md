@@ -10,9 +10,6 @@ Tamamen **tarayıcıda** çalışan, yüklenebilir hızlı bir hava durumu uygul
 - `languages/*.json` dosyalarından **çoklu dil** (English, Türkçe, Deutsch, Français, Español). İlk açılışta İngilizce başlar ve dil sorar; sonradan dünya simgesinden aranıp değiştirilebilir
 - Bildirim ve sunucu yok
 
-## Teşekkürler
-- Üçüncü taraf varlıklar, ses atıfları ve diğer teşekkürler için [CREDITS.md](CREDITS.md) dosyasına göz atabilirsiniz.
-
 ## Proje yapısı
 Derleme adımı ve framework yok: düz HTML/CSS/JS, küçük dosyalara bölünmüş. Scriptler tek bir kapsamı paylaşan klasik `<script>` etiketleridir ve `index.html` içindeki **sırayla** yüklenir.
 ```
@@ -33,7 +30,7 @@ images/                 icon.svg, icon-192.png, icon-512.png, icon-maskable-*.pn
 Ses dosyalarını `sound/` klasörüne koy (isimler aynı olmalı). Parça havaya göre seçilir, kesintisiz döner ve hava değişince yumuşakça geçiş yapar:
 `thunder_rain.mp3` fırtına · `rain.mp3` yağmur · `snowstorm.mp3` kar · `wind.mp3` rüzgarlı (≥30 km/s veya hamle ≥50) · `nature.mp3` gündüz sakin/bulutlu/sisli · `night.mp3` gece.
 
-Tarayıcılar ilk dokunuşa kadar sesi engeller; ses ilk etkileşimde başlar. Üst çubuktaki hoparlör düğmesi sesi kapatır/açar (hatırlanır). Ses seviyesi ve geçiş süresi `js/sound.js` içinde (`SND_VOLUME`, `SND_FADE`). Eklediğin seslerin kullanım hakkına sahip olduğundan emin ol: proje lisansı kodu kapsar, ses dosyalarını değil.
+Tarayıcılar ilk dokunuşa kadar sesi engeller; ses ilk etkileşimde başlar. Üst çubuktaki hoparlör düğmesi sesi kapatır/açar (hatırlanır). Ses seviyesi ve geçiş süresi `js/sound.js` içinde (`SND_VOLUME`, `SND_FADE`). Sesler Pixabay'dendir ([CREDITS.md](CREDITS.md)) ve proje lisansı kapsamında **değildir**. Sadece kullanım hakkına sahip olduğun sesleri ekle.
 
 ## Çalıştırma
 `file://` ile açılmaz; yerel sunucu kullan:
@@ -52,8 +49,11 @@ Tüm dosyaları repoya at → **Settings → Pages → `main` / root**.
 ## Veri kaynakları
 Open-Meteo (hava, hava kalitesi, şehir arama; CC BY 4.0, ticari olmayan kullanım ücretsiz) ve BigDataCloud (konumdan şehir adı).
 
+## Katkı ve krediler
+Sesler, veri kaynakları ve iletişim: [CREDITS.md](CREDITS.md). Katkı vermek için: [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## Yapay zekâ bildirimi
 Bu proje **üretken yapay zekâyla** (Anthropic'in Claude Sonnet 5.5 modeli) insan yönlendirmesi ve kontrolüyle üretilmiştir.
 
 ## Lisans
-[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) — atıf, ticari olmayan kullanım, aynı lisansla paylaşım. Bkz. [LICENSE](LICENSE).
+[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) — atıf, ticari olmayan kullanım, aynı lisansla paylaşım. Bkz. [LICENSE](LICENSE). Ses efektleri hariçtir (Pixabay Content License).
