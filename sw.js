@@ -2,10 +2,10 @@
    - App shell (HTML/CSS/JS/icons/languages): precached, served from cache instantly, refreshed in the background.
    - Sounds: cached ONCE in their own cache that survives app updates (no re-downloading ~800 KB files).
    If you replace a sound file, bump SOUND_CACHE. If you change any other cached file, bump V. */
-const V='weatherplus-v19';
+const V='weatherplus-v20';
 const SOUND_CACHE='weatherplus-sound-v2'; // v2: sounds re-encoded to 128 kbps
 const SHELL=['./','index.html','manifest.webmanifest','css/style.css',
-  'js/core.js','js/api.js','js/icons.js','js/themes.js','js/particles.js','js/sound.js','js/sync.js','js/metric-chart.js','js/render.js','js/lifecycle.js','js/cities.js','js/i18n.js','js/app.js',
+  'js/core.js','js/api.js','js/icons.js','js/themes.js','js/particles.js','js/sound.js','js/sync.js','js/metric-chart.js','js/render.js','js/lifecycle.js','js/cities.js','js/settings.js','js/i18n.js','js/app.js',
   'images/icon.svg','images/icon-192.png'];
 
 self.addEventListener('install',e=>{

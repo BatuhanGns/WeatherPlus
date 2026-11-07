@@ -9,7 +9,7 @@ Thanks for helping out! Weather+ is a plain HTML/CSS/JS app: no build step, no f
 
 ## Run it locally
 ```bash
-git clone <repo-url> && cd <repo>
+git clone https://github.com/BatuhanGns/WeatherPlus.git && cd WeatherPlus
 python3 -m http.server 8080   # open http://localhost:8080
 ```
 Open it over `http://`, not `file://`. If you changed cached files, do a hard refresh (the service worker caches aggressively).

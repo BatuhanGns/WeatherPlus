@@ -2,6 +2,7 @@
 
 A fast, installable weather app that runs **entirely in the browser**. No backend, no API keys, no accounts.
 
+**Repository:** https://github.com/BatuhanGns/WeatherPlus  
 > 🇹🇷 Türkçe için: [README.tr.md](README.tr.md)
 
 ## Features
@@ -10,6 +11,8 @@ A fast, installable weather app that runs **entirely in the browser**. No backen
 - **Up to 5 cities**, each synced automatically **every 15 minutes** (and whenever you open the app)
 - Installable PWA with offline support (last data is shown when offline)
 - **Multi-language UI** loaded from `languages/*.json` (English, Türkçe, Deutsch, Français, Español). The app starts in English on first launch and asks for your language; you can search and change it any time via the globe button
+- **Settings** (swipe right on the first city, or tap the sliders button): sound on/off + volume, °C/°F, km/h · mph · m/s, background effects, language
+- **Customizable layout**: show, hide and reorder the hourly forecast, the 7/14-day forecast and each of the 9 detail tiles
 - No push notifications, no server
 - Custom `404.html` page (also translated)
 
@@ -29,6 +32,7 @@ js/
   themes.js             sky colors by weather / time of day
   particles.js          canvas effects (rain, snow, stars)
   sound.js              ambient weather sound (Web Audio, loop + cross-fade)
+  settings.js           settings sheet, units, layout editor
   sync.js               load(), 15-min auto sync, formatters, sun tile
   metric-chart.js       hourly detail chart (double-tap a tile)
   render.js             renders the whole screen (day list, moon/sun, tiles)
@@ -54,7 +58,7 @@ Put your audio files in `sound/` (names must match). The track follows the weath
 | `nature.mp3` | calm/cloudy/fog by day |
 | `night.mp3` | calm/cloudy/fog at night |
 
-Browsers block audio until the first tap, so sound starts on your first interaction. The speaker button in the top bar mutes/unmutes (remembered). Tweak volume/fade in `js/sound.js` (`SND_VOLUME`, `SND_FADE`). Sounds are downloaded only when needed and cached once (they survive app updates). The bundled sounds are 128 kbps (~313 KB each); keep yours small too. If you replace a sound file, bump `SOUND_CACHE` in `sw.js`. With the browser's Data Saver on, sound stays off until you enable it. Sounds are from Pixabay (see [CREDITS.md](CREDITS.md)) and are **not** covered by the project license. Only add audio you have the rights to.
+Browsers block audio until the first tap, so sound starts on your first interaction. The speaker button in the top bar mutes/unmutes (remembered). Sound is **off by default**; turn it on with the speaker button or in Settings (volume slider included). Fade time: `SND_FADE` in `js/sound.js`. Sounds are downloaded only when needed and cached once (they survive app updates). The bundled sounds are 128 kbps (~313 KB each); keep yours small too. If you replace a sound file, bump `SOUND_CACHE` in `sw.js`. Sounds are from Pixabay (see [CREDITS.md](CREDITS.md)) and are **not** covered by the project license. Only add audio you have the rights to.
 
 ## Run locally
 Service workers and `fetch` need http(s), so don't open `index.html` via `file://`:
@@ -63,7 +67,7 @@ python3 -m http.server 8080   # then open http://localhost:8080
 ```
 
 ## Deploy (GitHub Pages)
-Push everything to a repo → **Settings → Pages → Deploy from branch → `main` / root**. Paths are relative, so project sites (`user.github.io/repo/`) work.
+Push everything to your repo (here: https://github.com/BatuhanGns/WeatherPlus) → **Settings → Pages → Deploy from branch → `main` / root**. Paths are relative, so project sites (`user.github.io/repo/`) work.
 
 ## Add a language
 1. Copy `languages/en.json` to `languages/<code>.json` (e.g. `it.json`) and translate the values (keep keys and `{placeholders}` unchanged).

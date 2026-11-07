@@ -2,12 +2,16 @@
 
 Tamamen **tarayıcıda** çalışan, yüklenebilir hızlı bir hava durumu uygulaması. Backend, API anahtarı ve hesap gerekmez.
 
+**Depo:** https://github.com/BatuhanGns/WeatherPlus
+
 ## Özellikler
 - Anlık durum, saatlik ve 14 günlük tahmin
 - Güneş/ay bilgileri, UV, hava kalitesi, rüzgar, basınç, görüş
 - **5 şehre kadar**; her şehir **15 dakikada bir** ve uygulama her açıldığında otomatik güncellenir
 - Çevrimdışı destekli, yüklenebilir PWA
 - `languages/*.json` dosyalarından **çoklu dil** (English, Türkçe, Deutsch, Français, Español). İlk açılışta İngilizce başlar ve dil sorar; sonradan dünya simgesinden aranıp değiştirilebilir
+- **Ayarlar** (ilk şehirde sağa kaydır ya da kaydırıcı düğmesine bas): ses aç/kapat + seviye, °C/°F, km/s · mph · m/s, arka plan efektleri, dil
+- **Düzenlenebilir arayüz**: saatlik tahmini, 7/14 günlük tahmini ve 9 detay kutusunun her birini göster, gizle, yeniden sırala
 - Bildirim ve sunucu yok
 
 ## Proje yapısı
@@ -18,7 +22,7 @@ index.html              sayfa iskeleti + <script> etiketleri
 sw.js                   service worker (çevrimdışı önbellek) — yeni dosyaları SHELL'e ekle
 manifest.webmanifest    PWA manifesti
 css/style.css           tüm stiller
-js/                     core, api, icons, themes, particles, sound, sync, metric-chart,
+js/                     core, api, icons, themes, particles, sound, settings, sync, metric-chart,
                         render, lifecycle, cities, i18n, app (her dosyanın başında ne yaptığı yazar)
 sound/                  nature, night, rain, snowstorm, thunder_rain, wind (.mp3)
 languages/              index.json + her dil için bir JSON
@@ -30,7 +34,7 @@ images/                 icon.svg, icon-192.png, icon-512.png, icon-maskable-*.pn
 Ses dosyalarını `sound/` klasörüne koy (isimler aynı olmalı). Parça havaya göre seçilir, kesintisiz döner ve hava değişince yumuşakça geçiş yapar:
 `thunder_rain.mp3` fırtına · `rain.mp3` yağmur · `snowstorm.mp3` kar · `wind.mp3` rüzgarlı (≥30 km/s veya hamle ≥50) · `nature.mp3` gündüz sakin/bulutlu/sisli · `night.mp3` gece.
 
-Tarayıcılar ilk dokunuşa kadar sesi engeller; ses ilk etkileşimde başlar. Üst çubuktaki hoparlör düğmesi sesi kapatır/açar (hatırlanır). Ses seviyesi ve geçiş süresi `js/sound.js` içinde (`SND_VOLUME`, `SND_FADE`). Sesler yalnızca gerektiğinde indirilir ve bir kez önbelleğe alınır (uygulama güncellemelerinde silinmez). Projedeki sesler 128 kbps'dir (dosya başına ~313 KB); seninkileri de küçük tut. Bir ses dosyasını değiştirirsen `sw.js` içindeki `SOUND_CACHE` değerini artır. Tarayıcıda Veri Tasarrufu açıksa ses, sen açana kadar kapalı başlar. Sesler Pixabay'dendir ([CREDITS.md](CREDITS.md)) ve proje lisansı kapsamında **değildir**. Sadece kullanım hakkına sahip olduğun sesleri ekle.
+Tarayıcılar ilk dokunuşa kadar sesi engeller; ses ilk etkileşimde başlar. Üst çubuktaki hoparlör düğmesi sesi kapatır/açar (hatırlanır). Ses **varsayılan olarak kapalıdır**; hoparlör düğmesinden ya da Ayarlar'dan aç (ses seviyesi kaydırıcısı da orada). Geçiş süresi: `js/sound.js` içindeki `SND_FADE`. Sesler yalnızca gerektiğinde indirilir ve bir kez önbelleğe alınır (uygulama güncellemelerinde silinmez). Projedeki sesler 128 kbps'dir (dosya başına ~313 KB); seninkileri de küçük tut. Bir ses dosyasını değiştirirsen `sw.js` içindeki `SOUND_CACHE` değerini artır. Sesler Pixabay'dendir ([CREDITS.md](CREDITS.md)) ve proje lisansı kapsamında **değildir**. Sadece kullanım hakkına sahip olduğun sesleri ekle.
 
 ## Çalıştırma
 `file://` ile açılmaz; yerel sunucu kullan:

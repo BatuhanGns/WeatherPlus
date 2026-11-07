@@ -37,7 +37,7 @@
       <svg viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
       <span id="cityName">Weather+</span>
     </button>
-    <div class="tb"><button class="rf glass press" id="sndBtn" aria-label="Ambient sound" data-i18n-aria="sound"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path class="w" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/><path class="x" d="M16 9l5 6M21 9l-5 6"/></svg></button><button class="rf glass press" id="lgBtn" aria-label="Language" data-i18n-aria="language"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.8 3.9 5.8 3.9 9s-1.3 6.2-3.9 9c-2.6-2.8-3.9-5.8-3.9-9S9.4 5.8 12 3z"/></svg></button><button class="rf glass press" id="rf" aria-label="Refresh" data-i18n-aria="refresh"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4v5h-5"/></svg></button></div>
+    <div class="tb"><button class="rf glass press" id="sndBtn" aria-label="Ambient sound" data-i18n-aria="sound"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path class="w" d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/><path class="x" d="M16 9l5 6M21 9l-5 6"/></svg></button><button class="rf glass press" id="setBtn" aria-label="Settings" data-i18n-aria="set.title"><svg viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></svg></button><button class="rf glass press" id="rf" aria-label="Refresh" data-i18n-aria="refresh"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4v5h-5"/></svg></button></div>
   </div>
   <div class="live rise" style="--i:1"><span id="upd">Loading…</span></div>
   <div class="dots" id="dots"></div>
@@ -48,8 +48,8 @@
     <div class="hl" id="hl">&nbsp;</div>
     <div class="rainalert" id="rain" hidden></div>
   </section>
-  <section class="glass card rise" style="--i:3"><h3 data-i18n="hourly">Hourly forecast</h3><div class="hours" id="hours"></div></section>
-  <section class="glass card rise" style="--i:4"><h3 id="dayT">7-day forecast</h3><div class="days" id="days"></div><div class="mr"><button class="more press" id="more" aria-label="Show more days" data-i18n-aria="moreDays"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button></div></section>
+  <section class="glass card rise" style="--i:3" id="secHourly"><h3 data-i18n="hourly">Hourly forecast</h3><div class="hours" id="hours"></div></section>
+  <section class="glass card rise" style="--i:4" id="secDays"><h3 id="dayT">7-day forecast</h3><div class="days" id="days"></div><div class="mr"><button class="more press" id="more" aria-label="Show more days" data-i18n-aria="moreDays"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button></div></section>
   <section class="grid rise" style="--i:5" id="tiles"></section>
   <div class="foot"><button class="inst press" id="inst" hidden data-i18n="install">Install as app</button><br><span data-i18n="dataBy">Data:</span> <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a><div class="ai"><span data-i18n="aiNote">Made with generative AI (Claude Sonnet 5.5)</span> · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a></div></div>
 </main>
@@ -69,6 +69,34 @@
   </div>
 </div>
 <div id="lang"><div class="sheet glass"><h1 data-i18n="language">Language</h1><p class="sub" data-i18n="langSub">Choose your language</p><input class="inp" id="lq" data-i18n-ph="langSearch" placeholder="Search languages" autocomplete="off"><div class="sg" id="lg"></div><button class="close" id="lClose" style="display:none" data-i18n="cancel">Cancel</button></div></div>
+<div id="settings"><div class="sheet glass set">
+  <h1 data-i18n="set.title">Settings</h1>
+  <div class="grp"><h5 data-i18n="sound">Ambient sound</h5>
+    <div class="sr"><span data-i18n="set.play">Play ambient sound</span><label class="sw"><input type="checkbox" id="setSound"><i></i></label></div>
+    <div class="sr"><span data-i18n="set.volume">Volume</span><input type="range" id="setVol" min="0" max="100"></div>
+  </div>
+  <div class="grp"><h5 data-i18n="set.display">Display</h5>
+    <div class="sr"><span data-i18n="set.temp">Temperature</span><div class="seg" id="segTemp"><button data-v="c">°C</button><button data-v="f">°F</button></div></div>
+    <div class="sr"><span data-i18n="set.wind">Wind speed</span><div class="seg" id="segWind"><button data-v="kmh">km/h</button><button data-v="mph">mph</button><button data-v="ms">m/s</button></div></div>
+    <div class="sr"><span data-i18n="set.fx">Background effects</span><label class="sw"><input type="checkbox" id="setFx"><i></i></label></div>
+  </div>
+  <div class="grp"><h5 data-i18n="set.layout">Layout</h5>
+    <button class="sr btnrow" id="setLayout"><span data-i18n="set.customize">Customize layout</span><em>›</em></button>
+    <button class="sr btnrow" id="setLang"><span data-i18n="language">Language</span><em id="setLangName"></em></button>
+  </div>
+  <div class="grp"><h5 data-i18n="set.about">About</h5>
+    <p class="abt">Weather+ <b id="appVer"></b><br><a href="https://github.com/BatuhanGns/WeatherPlus" target="_blank" rel="noopener" data-i18n="set.src">Source code</a> · <a href="https://github.com/BatuhanGns/WeatherPlus/blob/main/CREDITS.md" target="_blank" rel="noopener" data-i18n="set.credits">Credits</a> · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener" data-i18n="set.license">License</a></p>
+  </div>
+  <button class="close" id="setClose" data-i18n="set.done">Done</button>
+</div></div>
+<div id="layout"><div class="sheet glass set">
+  <h1 data-i18n="set.customize">Customize layout</h1>
+  <p class="sub" data-i18n="lay.hint">Show or hide blocks and use the arrows to reorder them.</p>
+  <div class="grp"><h5 data-i18n="lay.sections">Sections</h5><div id="layS"></div></div>
+  <div class="grp"><h5 data-i18n="lay.tiles">Detail tiles</h5><div id="layT"></div></div>
+  <button class="btn press" id="layDone" data-i18n="set.done" style="margin-top:16px">Done</button>
+  <button class="close" id="layReset" data-i18n="lay.reset">Reset to default</button>
+</div></div>
 <div id="toast" class="glass"></div>
 
 <script src="js/core.js"></script>
@@ -82,6 +110,7 @@
 <script src="js/render.js"></script>
 <script src="js/lifecycle.js"></script>
 <script src="js/cities.js"></script>
+<script src="js/settings.js"></script>
 <script src="js/i18n.js"></script>
 <script src="js/app.js"></script>
 </body>
