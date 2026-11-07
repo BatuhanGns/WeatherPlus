@@ -30,7 +30,7 @@ images/                 icon.svg, icon-192.png, icon-512.png, icon-maskable-*.pn
 Ses dosyalarını `sound/` klasörüne koy (isimler aynı olmalı). Parça havaya göre seçilir, kesintisiz döner ve hava değişince yumuşakça geçiş yapar:
 `thunder_rain.mp3` fırtına · `rain.mp3` yağmur · `snowstorm.mp3` kar · `wind.mp3` rüzgarlı (≥30 km/s veya hamle ≥50) · `nature.mp3` gündüz sakin/bulutlu/sisli · `night.mp3` gece.
 
-Tarayıcılar ilk dokunuşa kadar sesi engeller; ses ilk etkileşimde başlar. Üst çubuktaki hoparlör düğmesi sesi kapatır/açar (hatırlanır). Ses seviyesi ve geçiş süresi `js/sound.js` içinde (`SND_VOLUME`, `SND_FADE`). Sesler Pixabay'dendir ([CREDITS.md](CREDITS.md)) ve proje lisansı kapsamında **değildir**. Sadece kullanım hakkına sahip olduğun sesleri ekle.
+Tarayıcılar ilk dokunuşa kadar sesi engeller; ses ilk etkileşimde başlar. Üst çubuktaki hoparlör düğmesi sesi kapatır/açar (hatırlanır). Ses seviyesi ve geçiş süresi `js/sound.js` içinde (`SND_VOLUME`, `SND_FADE`). Sesler yalnızca gerektiğinde indirilir ve bir kez önbelleğe alınır (uygulama güncellemelerinde silinmez). Projedeki sesler 128 kbps'dir (dosya başına ~313 KB); seninkileri de küçük tut. Bir ses dosyasını değiştirirsen `sw.js` içindeki `SOUND_CACHE` değerini artır. Tarayıcıda Veri Tasarrufu açıksa ses, sen açana kadar kapalı başlar. Sesler Pixabay'dendir ([CREDITS.md](CREDITS.md)) ve proje lisansı kapsamında **değildir**. Sadece kullanım hakkına sahip olduğun sesleri ekle.
 
 ## Çalıştırma
 `file://` ile açılmaz; yerel sunucu kullan:

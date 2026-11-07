@@ -54,7 +54,7 @@ Put your audio files in `sound/` (names must match). The track follows the weath
 | `nature.mp3` | calm/cloudy/fog by day |
 | `night.mp3` | calm/cloudy/fog at night |
 
-Browsers block audio until the first tap, so sound starts on your first interaction. The speaker button in the top bar mutes/unmutes (remembered). Tweak volume/fade in `js/sound.js` (`SND_VOLUME`, `SND_FADE`). Sounds are from Pixabay (see [CREDITS.md](CREDITS.md)) and are **not** covered by the project license. Only add audio you have the rights to.
+Browsers block audio until the first tap, so sound starts on your first interaction. The speaker button in the top bar mutes/unmutes (remembered). Tweak volume/fade in `js/sound.js` (`SND_VOLUME`, `SND_FADE`). Sounds are downloaded only when needed and cached once (they survive app updates). The bundled sounds are 128 kbps (~313 KB each); keep yours small too. If you replace a sound file, bump `SOUND_CACHE` in `sw.js`. With the browser's Data Saver on, sound stays off until you enable it. Sounds are from Pixabay (see [CREDITS.md](CREDITS.md)) and are **not** covered by the project license. Only add audio you have the rights to.
 
 ## Run locally
 Service workers and `fetch` need http(s), so don't open `index.html` via `file://`:

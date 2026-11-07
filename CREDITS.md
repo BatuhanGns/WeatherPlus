@@ -21,6 +21,8 @@ Special thanks to all the talented creators for sharing their work!
 | `night.mp3` | [schorsch1964](https://pixabay.com/users/schorsch1964-51317703/) | [Night Atmosphere with Crickets](https://pixabay.com/sound-effects/do%C4%9Fa-night-atmosphere-with-crickets-374652/) |
 | `snowstorm.mp3` | [Dragon Studio](https://pixabay.com/users/dragon-studio-38165424/) | [Snowstorm Wind](https://pixabay.com/sound-effects/do%C4%9Fa-snowstorm-wind-1-min-584727/) |
 
+> The files were re-encoded to 128 kbps MP3 to reduce download size; they are otherwise unmodified.
+>
 > The audio files are **not** covered by the project's CC BY-NC-SA 4.0 license. They remain under the Pixabay Content License and belong to their respective creators.
 
 ## 🌦️ Data & Services

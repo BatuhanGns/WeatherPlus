@@ -18,7 +18,7 @@ Open it over `http://`, not `file://`. If you changed cached files, do a hard re
 See the **Project structure** section in [README.md](README.md). Quick rules:
 - Scripts in `js/` are classic `<script>` tags sharing one scope and loaded **in the order listed in `index.html`**. If you add a file, add it there **and** to `SHELL` in `sw.js`.
 - Weather API calls live only in `js/api.js`. User-visible text lives only in `languages/*.json` (use `tx('key')`), never hard-coded.
-- Bump the cache version (`V`) in `sw.js` when you change cached files.
+- Bump the cache version (`V`) in `sw.js` when you change cached files. Replaced a sound file? Bump `SOUND_CACHE` too.
 - Keep code comments in English.
 
 ## Adding a language
