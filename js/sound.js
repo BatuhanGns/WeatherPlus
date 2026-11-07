@@ -6,7 +6,9 @@
 const SND_FILES={nature:'sound/nature.mp3',night:'sound/night.mp3',rain:'sound/rain.mp3',snow:'sound/snowstorm.mp3',storm:'sound/thunder_rain.mp3',wind:'sound/wind.mp3'};
 const SND_VOLUME=.6,SND_FADE=2.5; // 0..1 and cross-fade seconds
 const SND_UNLOCK=['pointerup','touchend','click','keydown'];
-const snd={ctx:null,cur:null,want:null,buf:{},on:LS.get('w_sound')!=='0'};
+const sndPref=LS.get('w_sound');
+const snd={ctx:null,cur:null,out:new Set(),want:null,buf:{},
+  on:sndPref==='1'?true:sndPref==='0'?false:!(navigator.connection&&navigator.connection.saveData)}; // Data Saver => off until the user turns it on
 
 // weather theme + current conditions -> which track to play
 function soundFor(theme,c){
@@ -39,10 +41,15 @@ async function syncSound(){
   if(old)fadeOut(old);
   for(const k in snd.buf)if(k!==key)delete snd.buf[k]; // keep decoded audio small
 }
-function fadeOut(o){
-  const t=snd.ctx.currentTime;
-  o.g.gain.cancelScheduledValues(t);o.g.gain.setValueAtTime(o.g.gain.value,t);o.g.gain.linearRampToValueAtTime(0,t+SND_FADE);
-  try{o.src.stop(t+SND_FADE+.1)}catch(e){}
+function fadeOut(o,dur=SND_FADE){
+  const t=snd.ctx.currentTime;snd.out.add(o);
+  o.g.gain.cancelScheduledValues(t);o.g.gain.setValueAtTime(o.g.gain.value,t);o.g.gain.linearRampToValueAtTime(0,t+dur);
+  o.src.onended=()=>snd.out.delete(o);
+  try{o.src.stop(t+dur+.05)}catch(e){}
+}
+function stopAllSound(){ // instant mute (a 0.12 s fade avoids a click); also silences tracks still cross-fading out
+  if(snd.cur){fadeOut(snd.cur,.12);snd.cur=null}
+  snd.out.forEach(o=>fadeOut(o,.12));
 }
 
 // mute / unmute button (choice is remembered)
@@ -51,7 +58,7 @@ function setSoundOn(v,silent){
   $('sndBtn').classList.toggle('off',!v);
   if(!silent)toast(tx(v?'soundOn':'soundOff'));
   if(v){if(snd.ctx&&snd.ctx.state!=='running')snd.ctx.resume().catch(()=>{});syncSound()}
-  else if(snd.cur){fadeOut(snd.cur);snd.cur=null}
+  else if(snd.ctx){stopAllSound();setTimeout(()=>{if(!snd.on&&snd.ctx)snd.ctx.suspend().catch(()=>{})},300)} // suspend = no battery use while muted
 }
 
 // autoplay policy: the AudioContext can only start after a user gesture

@@ -2,7 +2,8 @@
    Language system: loads languages/*.json, tx() translator, language picker. */
 
 let LD=null,LEN=null,LANGC='en',LC='en-US',LANGS=[],RSTALE=false,LANGFIRST=false;
-const getJ=u=>fetch(u,{cache:'no-cache'}).then(r=>{if(!r.ok)throw 0;return r.json()});
+const getJ=u=>fetch(u).then(r=>{if(!r.ok)throw 0;return r.json()}); // served from the service-worker cache
+const langsP=getJ('languages/index.json').then(a=>{LANGS=a}).catch(()=>{LANGS=[{code:'en',name:'English',english:'English'},{code:'tr',name:'Türkçe',english:'Turkish'}]}); // loaded in the background
 const tx=(k,v)=>{let r=(LD&&LD.s&&LD.s[k])??(LEN&&LEN.s&&LEN.s[k])??k;if(v)for(const a in v)r=r.split('{'+a+'}').join(v[a]);return r};
 const WG={57:56,67:66,86:85,99:96,81:80};
 const wtxt=cc=>{const k=cc&&cc.wmo!=null?(WG[cc.wmo]||cc.wmo):null;return (k!=null&&((LD&&LD.wmo&&LD.wmo[k])||(LEN&&LEN.wmo&&LEN.wmo[k])))||(cc&&cc.text)||tx('unknown')};
@@ -15,8 +16,9 @@ function applyStatic(){
   document.documentElement.style.setProperty('--hx',JSON.stringify(tx('hourlyForecast')));
 }
 async function setLang(code){
-  try{if(!LEN)LEN=await getJ('languages/en.json')}catch(e){}
-  try{LD=code==='en'?LEN:await getJ('languages/'+code+'.json')}catch(e){LD=LEN;code='en'}
+  const pe=LEN?null:getJ('languages/en.json').catch(()=>null),pl=code==='en'?null:getJ('languages/'+code+'.json').catch(()=>null); // fetch both in parallel
+  if(pe)LEN=await pe;
+  if(code==='en')LD=LEN;else{LD=await pl;if(!LD){LD=LEN;code='en'}}
   LANGC=code;LC=(LD&&LD.meta&&LD.meta.locale)||code;
   document.documentElement.lang=code;
   applyStatic();
@@ -29,7 +31,7 @@ function langList(f){
     .sort((p,q)=>(q.code===LANGC)-(p.code===LANGC)||(q.code===dev)-(p.code===dev));
   $('lg').innerHTML=a.length?a.map(x=>`<button data-c="${esc(x.code)}">${esc(x.name)}<small>${esc(x.english)}${x.code===LANGC?' ✓':''}</small></button>`).join(''):'<div class="msg">'+tx('noResults')+'</div>';
 }
-function openLang(first){LANGFIRST=!!first;$('lClose').style.display=first?'none':'block';$('lq').value='';langList('');$('lang').classList.add('on')}
+function openLang(first){LANGFIRST=!!first;$('lClose').style.display=first?'none':'block';$('lq').value='';$('lang').classList.add('on');langsP.then(()=>langList($('lq').value))}
 $('lgBtn').onclick=()=>openLang(false);
 $('lClose').onclick=()=>$('lang').classList.remove('on');
 $('lang').addEventListener('click',e=>{if(e.target===$('lang')&&!LANGFIRST)$('lang').classList.remove('on')});
