@@ -4,11 +4,11 @@
    Browsers block audio until the first tap, so playback starts on the first user interaction. */
 
 const SND_FILES={nature:'sound/nature.mp3',night:'sound/night.mp3',rain:'sound/rain.mp3',snow:'sound/snowstorm.mp3',storm:'sound/thunder_rain.mp3',wind:'sound/wind.mp3'};
-const SND_VOLUME=.6,SND_FADE=2.5; // 0..1 and cross-fade seconds
+const SND_FADE=2.5; // cross-fade seconds (volume is a user setting: PREF.vol)
 const SND_UNLOCK=['pointerup','touchend','click','keydown'];
 const sndPref=LS.get('w_sound');
 const snd={ctx:null,cur:null,out:new Set(),want:null,buf:{},
-  on:sndPref==='1'?true:sndPref==='0'?false:!(navigator.connection&&navigator.connection.saveData)}; // Data Saver => off until the user turns it on
+  on:sndPref==='1'}; // off by default: the user turns it on (speaker button or Settings)
 
 // weather theme + current conditions -> which track to play
 function soundFor(theme,c){
@@ -35,7 +35,7 @@ async function syncSound(){
   if(snd.want!==key||!snd.on||(snd.cur&&snd.cur.key===key))return; // changed while loading
   const ctx=snd.ctx,t=ctx.currentTime,src=ctx.createBufferSource(),g=ctx.createGain();
   src.buffer=buf;src.loop=true;src.connect(g);g.connect(ctx.destination);
-  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(SND_VOLUME,t+SND_FADE);
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(PREF.vol,t+SND_FADE);
   src.start(t);
   const old=snd.cur;snd.cur={key,src,g};
   if(old)fadeOut(old);
@@ -47,6 +47,7 @@ function fadeOut(o,dur=SND_FADE){
   o.src.onended=()=>snd.out.delete(o);
   try{o.src.stop(t+dur+.05)}catch(e){}
 }
+function applyVolume(){if(snd.ctx&&snd.cur){const t=snd.ctx.currentTime;snd.cur.g.gain.cancelScheduledValues(t);snd.cur.g.gain.setTargetAtTime(PREF.vol,t,.05)}}
 function stopAllSound(){ // instant mute (a 0.12 s fade avoids a click); also silences tracks still cross-fading out
   if(snd.cur){fadeOut(snd.cur,.12);snd.cur=null}
   snd.out.forEach(o=>fadeOut(o,.12));

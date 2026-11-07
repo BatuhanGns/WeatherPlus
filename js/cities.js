@@ -29,7 +29,7 @@ function showCity(i,dir){
   fetching=false;start();dots();slideAnim(dir);
 }
 function goCity(i,dir){if(i<0||i>=MAXC)return;if(!cities[i]){openSetup(false,i);return}showCity(i,dir)}
-function swipe(dx){if(dx<0)goCity(ci+1,1);else goCity(ci-1,-1)}
+function swipe(dx){if(dx<0)goCity(ci+1,1);else if(ci===0)openSettings();else goCity(ci-1,-1)} // swipe right on the first city = Settings
 function pick(l){
   const s=sSlot;cities[s]=l;saveC();LS.set('w_cache'+s,'');LS.set('w_t'+s,'0');closeSetup();
   showCity(s,s>ci?1:s<ci?-1:0);

@@ -32,7 +32,6 @@ function langList(f){
   $('lg').innerHTML=a.length?a.map(x=>`<button data-c="${esc(x.code)}">${esc(x.name)}<small>${esc(x.english)}${x.code===LANGC?' ✓':''}</small></button>`).join(''):'<div class="msg">'+tx('noResults')+'</div>';
 }
 function openLang(first){LANGFIRST=!!first;$('lClose').style.display=first?'none':'block';$('lq').value='';$('lang').classList.add('on');langsP.then(()=>langList($('lq').value))}
-$('lgBtn').onclick=()=>openLang(false);
 $('lClose').onclick=()=>$('lang').classList.remove('on');
 $('lang').addEventListener('click',e=>{if(e.target===$('lang')&&!LANGFIRST)$('lang').classList.remove('on')});
 $('lq').addEventListener('input',()=>langList($('lq').value));

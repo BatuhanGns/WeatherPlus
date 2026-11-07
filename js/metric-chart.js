@@ -1,7 +1,7 @@
 /* metric-chart.js
    Hourly metric detail chart (double-tap a tile). */
 
-const CFG={feels:{f:v=>Math.round(v)+'°'},hum:{f:v=>v+'%',lo:0,hi:100},wind:{f:v=>v,lo:0,hiMin:30},uv:{f:v=>Math.round(v),lo:0,hi:11,col:11},vis:{f:v=>v>=10?Math.round(v):v,lo:0},pres:{f:v=>v},cloud:{f:v=>v+'%',lo:0,hi:100},aqi:{f:v=>v,lo:0,hi:6,col:6}};
+const CFG={feels:{f:v=>TU(v)+'°'},hum:{f:v=>v+'%',lo:0,hi:100},wind:{f:v=>WV(v),lo:0,hiMin:30},uv:{f:v=>Math.round(v),lo:0,hi:11,col:11},vis:{f:v=>v>=10?Math.round(v):v,lo:0},pres:{f:v=>v},cloud:{f:v=>v+'%',lo:0,hi:100},aqi:{f:v=>v,lo:0,hi:6,col:6}};
 const scol=f=>f<.2?'#5fd068':f<.4?'#ffd84d':f<.6?'#ff9a3d':f<.8?'#ff5a5a':'#b05aff';
 let xm=null,tapT=0,tapK='';
 function buildChart(k){
@@ -19,10 +19,12 @@ function buildChart(k){
     return `<div class="mc"><b>${lb}</b><span class="mv">${v==null?'—':c.f(v)}</span><div class="mb"><i style="height:${Math.min(Math.max(p,0),100)}%;background:${bg}"></i></div>${ar}</div>`}).join('');
 }
 function openX(k,quiet){
-  const L=[...document.querySelectorAll('#tiles .t[data-m]')],i=L.findIndex(e=>e.dataset.m===k);if(i<0)return;
+  const L=[...document.querySelectorAll('#tiles .t[data-m]')],i=L.findIndex(e=>e.dataset.m===k);if(i<0){xm=null;return}
   L.forEach(e=>{e.classList.remove('x');e.style.display=''});
-  const t=L[i];xm=k;if(L[i^1])L[i^1].style.display='none';
-  t.style.transformOrigin=i%2?'right center':'left center';
+  const t=L[i];xm=k;
+  const gr=$('tiles').getBoundingClientRect(),tr=t.getBoundingClientRect(); // works with any tile order
+  const nb=L.find(e=>e!==t&&Math.abs(e.getBoundingClientRect().top-tr.top)<4);if(nb)nb.style.display='none';
+  t.style.transformOrigin=tr.left-gr.left<gr.width/4?'left center':'right center';
   t.querySelector('.chart').innerHTML=buildChart(k);t.classList.add('x');
   t.style.animation=quiet?'none':'';if(!quiet)t.scrollIntoView({block:'nearest',behavior:'smooth'});
 }

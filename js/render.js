@@ -14,7 +14,7 @@ function drawDays(){
     const rp=x.day.rain??Math.max(0,...(x.hour||[]).map(h=>h.chance_of_rain||0));
     const sub=[exp&&new Date(x.date+'T12:00').toLocaleDateString(LC,{day:'numeric',month:'short'}),rp>=20&&tx('rainPct',{p:rp})].filter(Boolean).join(' · ');
     const dot=i===0?`<u style="left:${Math.min(Math.max((c.temp_c-mn)/rg*100,0),100)}%"></u>`:'';
-    return `<div class="d"><b>${nm}${sub?`<span class="rainp">${sub}</span>`:''}</b>${ic(kindOf(x.day.condition&&x.day.condition.code),1)}<span class="lo">${Math.round(x.day.mintemp_c)}°</span><div class="bar"><i style="left:${a}%;right:${100-b}%"></i>${dot}</div><span class="hi">${Math.round(x.day.maxtemp_c)}°</span></div>`}).join('');
+    return `<div class="d"><b>${nm}${sub?`<span class="rainp">${sub}</span>`:''}</b>${ic(kindOf(x.day.condition&&x.day.condition.code),1)}<span class="lo">${TU(x.day.mintemp_c)}°</span><div class="bar"><i style="left:${a}%;right:${100-b}%"></i>${dot}</div><span class="hi">${TU(x.day.maxtemp_c)}°</span></div>`}).join('');
 }
 function setExp(v){
   exp=v;$('more').classList.toggle('open',v);
@@ -73,9 +73,9 @@ function render(d,stale){RSTALE=!!stale;
   if(js===lastJson)return;lastJson=js;
   const day=c.is_day===1;
   $('hIcon').innerHTML=ic(kindOf(cc.code),day);
-  countTo($('temp'),Math.round(c.temp_c));
+  countTo($('temp'),TU(c.temp_c));
   $('cond').textContent=wtxt(cc);
-  $('hl').textContent=tx('hiLo',{hi:Math.round(f[0].day.maxtemp_c),lo:Math.round(f[0].day.mintemp_c)});
+  $('hl').textContent=tx('hiLo',{hi:TU(f[0].day.maxtemp_c),lo:TU(f[0].day.mintemp_c)});
   setTheme(themeOf(cc.code,day));
   setSound(soundFor(themeOf(cc.code,day),c));
 
@@ -88,7 +88,7 @@ function render(d,stale){RSTALE=!!stale;
   const sl=$('hours').scrollLeft;
   $('hours').innerHTML=hrs.length?hrs.map((h,i)=>{
     const hr=+(String(h.time).match(/\s(\d+)/)||[0,12])[1],dy=h.is_day!==undefined?h.is_day===1:(hr>=6&&hr<20);
-    return `<div class="h ${i?(hr===0?'dayb':''):'now'}"><b>${i?(hr===0?dn(h.time):String(hr).padStart(2,'0')):tx('now')}</b>${ic(kindOf(h.condition&&h.condition.code),dy)}<span>${Math.round(h.temp_c)}°</span><small>${h.chance_of_rain>=20?'%'+h.chance_of_rain:''}</small></div>`}).join('')
+    return `<div class="h ${i?(hr===0?'dayb':''):'now'}"><b>${i?(hr===0?dn(h.time):String(hr).padStart(2,'0')):tx('now')}</b>${ic(kindOf(h.condition&&h.condition.code),dy)}<span>${TU(h.temp_c)}°</span><small>${h.chance_of_rain>=20?'%'+h.chance_of_rain:''}</small></div>`}).join('')
     :'<p class="nodata">'+tx('hoursPending')+'</p>';
   $('hours').scrollLeft=sl;
 
@@ -98,15 +98,17 @@ function render(d,stale){RSTALE=!!stale;
   const p=num(c.pressure_mb),v=num(c.vis_km),uv=num(c.uv)||0;
   const T=(h,body,sub)=>`<div class="t glass press" data-m="${h}"><button class="xc" aria-label="${tx('close')}"><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button><h4>${tx('tile.'+h)}</h4>${body}<p>${sub||''}</p><div class="chart"></div></div>`;
   const S=(val,u)=>`<strong>${val}<em>${u||''}</em></strong>`;
-  $('tiles').innerHTML=
-   T('feels',S(Math.round(c.feelslike_c)+'°'),c.feelslike_c>c.temp_c+1?tx('feels.hot'):c.feelslike_c<c.temp_c-1?tx('feels.cold'):tx('feels.same'))+
-   T('hum',S(c.humidity,'%'),tx('dew',{x:Math.round(c.dewpoint_c)}))+
-   T('wind',`<div class="row">${S(Math.round(c.wind_kph),tx('u.kmh'))}<div class="cmp"><svg id="wa" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V5M6 11l6-6 6 6"/></svg></div></div>`,`${dirOf(c)}${c.gust_kph?`, ${tx('gust',{x:Math.round(c.gust_kph)})}`:''}`)+
-   T('uv',S(Math.round(uv))+`<div class="sc"><u style="left:${Math.min(uv/11,1)*100}%"></u></div>`,uvT(uv))+
-   T('vis',S(v!==null?v:'—','km'),v>=10?tx('vis.clear'):v>=4?tx('vis.mod'):v!==null?tx('vis.low'):'')+
-   T('pres',S(p>0?Math.round(p):'—','hPa'),p>0?(p<1009?tx('pres.low'):p>1022?tx('pres.high'):tx('pres.norm')):tx('noData'))+
-   T('cloud',S(num(c.cloud)??'—','%'),num(c.cloud)===null?tx('noData'):tx('cloud.'+(c.cloud<20?0:c.cloud<60?1:c.cloud<90?2:3)))+
-   T('aqi',S(aq||'—')+(aq?`<div class="sc"><u style="left:${(aq-.5)/6*100}%"></u></div>`:''),aq?aqT(aq):tx('noData'))+skyTile(f,l.localtime);
+  const TL={
+   feels:T('feels',S(TU(c.feelslike_c)+'°'),c.feelslike_c>c.temp_c+1?tx('feels.hot'):c.feelslike_c<c.temp_c-1?tx('feels.cold'):tx('feels.same')),
+   hum:T('hum',S(c.humidity,'%'),tx('dew',{x:TU(c.dewpoint_c)})),
+   wind:T('wind',`<div class="row">${S(WV(c.wind_kph),windU())}<div class="cmp"><svg id="wa" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V5M6 11l6-6 6 6"/></svg></div></div>`,`${dirOf(c)}${c.gust_kph?`, ${tx('gust',{x:WV(c.gust_kph),u:windU()})}`:''}`),
+   uv:T('uv',S(Math.round(uv))+`<div class="sc"><u style="left:${Math.min(uv/11,1)*100}%"></u></div>`,uvT(uv)),
+   vis:T('vis',S(v!==null?v:'—','km'),v>=10?tx('vis.clear'):v>=4?tx('vis.mod'):v!==null?tx('vis.low'):''),
+   pres:T('pres',S(p>0?Math.round(p):'—','hPa'),p>0?(p<1009?tx('pres.low'):p>1022?tx('pres.high'):tx('pres.norm')):tx('noData')),
+   cloud:T('cloud',S(num(c.cloud)??'—','%'),num(c.cloud)===null?tx('noData'):tx('cloud.'+(c.cloud<20?0:c.cloud<60?1:c.cloud<90?2:3))),
+   aqi:T('aqi',S(aq||'—')+(aq?`<div class="sc"><u style="left:${(aq-.5)/6*100}%"></u></div>`:''),aq?aqT(aq):tx('noData')),
+   sky:skyTile(f,l.localtime)};
+  $('tiles').innerHTML=LAY.t.filter(k=>!LAY.ht.includes(k)).map(k=>TL[k]||'').join('');
   if(xm)openX(xm,true);
   requestAnimationFrame(()=>{const w=$('wa');if(w)w.style.transform=`rotate(${(c.wind_degree||0)+180}deg)`});
   if(firstRender){firstRender=false;document.body.classList.add('go')}

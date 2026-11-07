@@ -14,7 +14,7 @@ function setFx(m){
   }
 }
 (function loop(){
-  requestAnimationFrame(loop);tk+=.016;cx.clearRect(0,0,W,H);if(reduce||!P.length)return;
+  requestAnimationFrame(loop);tk+=.016;cx.clearRect(0,0,W,H);if(reduce||!P.length||PREF.fx===false)return;
   if(mode==='rain'||mode==='storm'){
     cx.strokeStyle='rgba(210,230,255,.45)';cx.lineWidth=1.2;cx.beginPath();
     for(const p of P){cx.moveTo(p.x,p.y);cx.lineTo(p.x-p.l*.18,p.y+p.l);p.y+=p.v;p.x-=p.v*.18;if(p.y>H){p.y=-20;p.x=Math.random()*(W+60)}}
